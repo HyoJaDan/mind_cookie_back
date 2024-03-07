@@ -24,11 +24,16 @@ public class MemberController {
 
         return new MemberDto(findMember.getWeightRecords(),findMember.getCalorie(),findMember.getIntakedCalorie());
     }
-    //@ResponseBody
-   // @GetMapping("/api/member/addWeight={weight}")
-    //public MemberDto addMemberWeight(){
+    @ResponseBody
+    // http://localhost:8080/api/member/1/weight?weight=68
+    @PutMapping("/api/member/{id}/weight")
+    public MemberDto addWeight(@PathVariable Long id, @RequestParam int weight) {
+        memberService.update(id,weight);
 
-   // }
+        Member findMember=memberService.findOne(id);
+        return new MemberDto(findMember.getWeightRecords(),findMember.getCalorie(),findMember.getIntakedCalorie());
+    }
+
     @Data
     static class MemberDto{
         private List<WeightRecordDto> weight;

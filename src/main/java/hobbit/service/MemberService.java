@@ -1,10 +1,13 @@
 package hobbit.service;
 
 import hobbit.domain.Member;
+import hobbit.domain.WeightRecord;
 import hobbit.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @Transactional(readOnly = true)
@@ -14,5 +17,14 @@ public class MemberService {
 
     public Member findOne(Long id) {
         return memberRepository.findOne(id);
+    }
+
+    @Transactional
+    public void update(Long id, int weight) {
+        Member member = memberRepository.findOne(id);
+
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        WeightRecord weightRecord = new WeightRecord(currentDateTime,weight,member);
+        member.addWeightRecord(weightRecord);
     }
 }
