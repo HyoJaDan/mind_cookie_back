@@ -15,6 +15,7 @@ public class Member {
 
     private String userName;
     private int birthYear;
+
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
@@ -22,6 +23,10 @@ public class Member {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<WeightRecord> weightRecords = new ArrayList<>();
+    public void addWeightRecord(WeightRecord record){
+        this.weightRecords.add(record);
+        record.setMember(this);
+    }
 
     private int calorie;
     private int intakedCalorie;
@@ -30,29 +35,8 @@ public class Member {
     @JoinColumn(name="TEAM_ID")
     private Team team;
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setBirthYear(int birthYear) {
-        this.birthYear = birthYear;
-    }
-
-    public void setGender(Gender gender) {
-        this.gender = gender;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public void addWeightRecord(WeightRecord record){
-        this.weightRecords.add(record);
-        record.setMember(this);
-    }
-
-    public void setCalorie(int calorie) {
-        this.calorie = calorie;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     public Member(){}
