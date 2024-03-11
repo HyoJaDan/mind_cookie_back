@@ -18,6 +18,14 @@ public class MemberController {
     private final MemberService memberService;
 
     @ResponseBody
+    @GetMapping("/api/member/test/{id}")
+    public Member getAllMemberData(@PathVariable Long id){
+        Member findMember = memberService.findOneAll(id);
+
+        return findMember;
+    }
+
+    @ResponseBody
     @GetMapping("/api/member/{id}")
     public MemberDto requestMember(@PathVariable Long id){
         Member findMember = memberService.findOne(id);

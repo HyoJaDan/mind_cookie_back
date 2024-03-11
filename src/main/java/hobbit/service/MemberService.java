@@ -19,6 +19,7 @@ public class MemberService {
         return memberRepository.findOne(id);
     }
 
+    public Member findOneAll(Long id){return memberRepository.findOneEveryThing(id);}
     @Transactional
     public void update(Long id, int weight) {
         Member member = memberRepository.findOne(id);

@@ -31,6 +31,9 @@ public class Member {
     private int calorie;
     private int intakedCalorie;
 
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<PersonalChallenge> personalChallenges=new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="TEAM_ID")
     private Team team;

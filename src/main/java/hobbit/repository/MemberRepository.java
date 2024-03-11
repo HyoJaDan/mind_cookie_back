@@ -10,6 +10,19 @@ public class MemberRepository {
     @PersistenceContext
     private EntityManager em;
 
+    public Member findOneEveryThing(Long id) {
+        return em.createQuery(
+                        "select distinct m from Member m"+
+                                " join fetch m.weightRecords"+
+                                " join fetch m.team"+
+                                " join fetch m.personalChallenges pc"+
+                                " join fetch pc.etcGoals"+
+                                " join fetch pc.meals"+
+                                " where m.id = :id", Member.class)
+                .setParameter("id",id)
+                .getSingleResult();
+    }
+
     public Member findOne(Long id) {
         return em.createQuery(
                 "select distinct m from Member m"+

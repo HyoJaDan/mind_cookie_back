@@ -11,15 +11,10 @@ import java.time.LocalDateTime;
 @Table(name = "weight_record")
 @Getter
 public class WeightRecord {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date")
     private LocalDateTime date;
-
-    @Column(name = "weight")
     private Integer weight;
 
     @JsonIgnore
