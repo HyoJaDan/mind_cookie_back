@@ -15,6 +15,11 @@ public class Member {
 
     private String userName;
     private String teamUserName;
+
+    public void setTeamUserName(String teamUserName) {
+        this.teamUserName = teamUserName;
+    }
+
     private int birthYear;
 
     @Enumerated(EnumType.STRING)

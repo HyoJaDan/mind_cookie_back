@@ -28,4 +28,10 @@ public class MemberService {
         WeightRecord weightRecord = new WeightRecord(currentDateTime,weight,member);
         member.addWeightRecord(weightRecord);
     }
+
+    public void updateTeamUserName(Long id, String userName) {
+        Member member = memberRepository.findOne(id);
+
+        member.setTeamUserName(userName);
+    }
 }

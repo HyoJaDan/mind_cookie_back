@@ -52,13 +52,21 @@ public class MemberController {
     @ResponseBody
     // http://localhost:8080/api/member/1/weight?weight=68
     @PutMapping("/api/member/{id}/weight")
-    public MemberDto addWeight(@PathVariable Long id, @RequestParam int weight) {
+    public MemberDto addWeightRequest(@PathVariable Long id, @RequestParam int weight) {
         memberService.update(id,weight);
 
         Member findMember=memberService.findOne(id);
         return new MemberDto(findMember.getWeightRecords(),findMember.getCalorie(),findMember.getIntakedCalorie());
     }
 
+    @ResponseBody
+    @PutMapping("/api/member/{id}/teamUserName")
+    public Member addTeamUserNameRequest(@PathVariable Long id, @RequestParam String teamUserName){
+        memberService.updateTeamUserName(id,teamUserName);
+
+        Member findMember=memberService.findOne(id);
+        return findMember;
+    }
     @Data
     static class MemberDto{
         private List<WeightRecordDto> weight;
