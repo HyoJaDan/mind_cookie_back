@@ -17,6 +17,11 @@ import java.util.stream.Collectors;
 public class MemberController {
     private final MemberService memberService;
 
+    /**
+     * 모든 멤버 정보 가져오기 - 실패
+     * @param id
+     * @return
+     */
     @ResponseBody
     @GetMapping("/api/member/test/{id}")
     public Member getAllMemberData(@PathVariable Long id){
@@ -25,6 +30,11 @@ public class MemberController {
         return findMember;
     }
 
+    /**
+     * 특정 맴버 가져오기
+     * @param id
+     * @return
+     */
     @ResponseBody
     @GetMapping("/api/member/{id}")
     public MemberDto requestMember(@PathVariable Long id){
@@ -32,6 +42,13 @@ public class MemberController {
 
         return new MemberDto(findMember.getWeightRecords(),findMember.getCalorie(),findMember.getIntakedCalorie());
     }
+
+    /**
+     * 몸무게 업데이트 하는 함수
+     * @param id
+     * @param weight
+     * @return
+     */
     @ResponseBody
     // http://localhost:8080/api/member/1/weight?weight=68
     @PutMapping("/api/member/{id}/weight")

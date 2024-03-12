@@ -1,5 +1,6 @@
 package hobbit.repository;
 
+import hobbit.domain.EtcGoal;
 import hobbit.domain.PersonalChallenge;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -19,5 +20,13 @@ public class PersonalChallengeRepository {
                         " where pc.member.id = :Member_ID",PersonalChallenge.class)
                 .setParameter("Member_ID",id)
                 .getResultList();
+    }
+
+    public void saveEtcGoal(EtcGoal etcGoal) {
+        em.persist(etcGoal);
+    }
+
+    public void savePersonalChallenge(PersonalChallenge personalChallenge) {
+        em.persist(personalChallenge);
     }
 }

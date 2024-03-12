@@ -14,6 +14,7 @@ public class Member {
     private Long id;
 
     private String userName;
+    private String teamUserName;
     private int birthYear;
 
     @Enumerated(EnumType.STRING)
@@ -33,6 +34,11 @@ public class Member {
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<PersonalChallenge> personalChallenges=new ArrayList<>();
+
+    public void addPersonalChallenge(PersonalChallenge personalChallenge){
+        personalChallenges.add(personalChallenge);
+        personalChallenge.setMember(this);
+    }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="TEAM_ID")

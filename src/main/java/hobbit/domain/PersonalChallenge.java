@@ -20,6 +20,9 @@ public class PersonalChallenge {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="Member_ID")
     private Member member; // 연관된 멤버
+    public void setMember(Member member) {
+        this.member = member;
+    }
 
     // 기타 목표와 달성 여부
     @OneToMany(mappedBy = "personalChallenge", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -1,6 +1,7 @@
 package hobbit.service;
 
 
+import hobbit.domain.Member;
 import hobbit.domain.Team;
 import hobbit.repository.TeamRepository;
 import jakarta.persistence.EntityManager;
@@ -16,7 +17,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamService {
     private final TeamRepository teamRepository;
+    public Team findOne(Long id) {
+        return teamRepository.findOne(id);
+    }
     public List<Team> findTeams() {
         return teamRepository.findAllTeam();
+    }
+
+
+    @Transactional
+    public void addMember(Member findMember, Team findTeam) {
+        findTeam.addTeamMember(findMember);
     }
 }

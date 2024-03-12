@@ -1,13 +1,14 @@
 package hobbit.controller;
 
 import hobbit.domain.ChallngeType;
+import hobbit.domain.Member;
 import hobbit.domain.Team;
 import hobbit.repository.TeamRepository;
+import hobbit.service.MemberService;
 import hobbit.service.TeamService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,8 +18,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TeamController {
     private final TeamService teamService;
+    private final MemberService memberService;
+
+    @GetMapping("/api/team/{id}")
+    public TeamDto requestOneTeam(@PathVariable Long id){
+        Team findTeam = teamService.findOne(id);
+
+        return new TeamDto(findTeam);
+    }
     @GetMapping("/api/team")
-    public List<TeamDto> requestTeam(){
+    public List<TeamDto> requestAllTeam(){
         List<Team> findAllTeam= teamService.findTeams();
 
         List<TeamDto> collect = findAllTeam.stream()
@@ -27,7 +36,6 @@ public class TeamController {
 
         return collect;
     }
-
     @Data
     class TeamDto{
         private String teamName;
@@ -45,6 +53,15 @@ public class TeamController {
             this.challngeType = team.getChallengeType();
             this.numOfMember = team.getMembers().size();
         }
+    }
+
+    @ResponseBody
+    @PutMapping("/api/member/{memberId}/team/{teamId}")
+    public void participapteInTeam(@PathVariable Long memberId, @PathVariable Long teamId){
+        Member findMember = memberService.findOne(memberId);
+        Team findTeam = teamService.findOne(teamId);
+
+        teamService.addMember(findMember,findTeam);
     }
 
 }

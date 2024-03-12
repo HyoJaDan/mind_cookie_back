@@ -56,7 +56,8 @@ public class InitDB {
 
             //팀 넣기
             LocalDateTime currentDateTime = LocalDateTime.now();
-            Team team = new Team("첫번째 팀",member, 5,currentDateTime, ChallngeType.reduce);
+            Team team=new Team();
+            //Team team = new Team("첫번째 팀",member, 5,currentDateTime, ChallngeType.reduce);
             em.persist(team);
 
             //PersonalChallenge 넣기

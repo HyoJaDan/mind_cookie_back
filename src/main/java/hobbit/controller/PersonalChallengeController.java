@@ -1,24 +1,38 @@
 package hobbit.controller;
 
+import hobbit.domain.Member;
 import hobbit.domain.PersonalChallenge;
+import hobbit.domain.Team;
+import hobbit.service.MemberService;
 import hobbit.service.PersonalChallengeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class PersonalChallengeController {
     private final PersonalChallengeService personalChallengeService;
-
+    private final MemberService memberService;
     @ResponseBody
-    @GetMapping("/members/{id}/personal-challenges")
+    @GetMapping("/api/member/{id}/personal-challenges")
     public List<PersonalChallenge> getPersonalChallanges(@PathVariable Long id){
         List<PersonalChallenge> findChallange= personalChallengeService.getPersonalChallengeRepositoryByMemberId(id);
         return findChallange;
+    }
+
+    /**
+     * http://localhost:8080/api/member/1/startDay/personal-challenges/addEtcGoals?startDate=2024-03-15T15:00:00
+     * @param memberId
+     * @param startDate
+     * @param goals
+     */
+    @ResponseBody
+    @PutMapping("/api/member/{memberId}/startDay/personal-challenges/addEtcGoals")
+    public void addEtcGoals(@PathVariable Long memberId, @RequestParam LocalDateTime startDate, @RequestBody List<String> goals){
+        Member findMember = memberService.findOne(memberId);
+        personalChallengeService.initEtcGoals(findMember,startDate,goals);
     }
 }
