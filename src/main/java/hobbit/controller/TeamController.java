@@ -20,12 +20,22 @@ public class TeamController {
     private final TeamService teamService;
     private final MemberService memberService;
 
+    /**
+     * 팀 하나 정보 가져오기
+     * @param id
+     * @return
+     */
     @GetMapping("/api/team/{id}")
     public TeamDto requestOneTeam(@PathVariable Long id){
         Team findTeam = teamService.findOne(id);
 
         return new TeamDto(findTeam);
     }
+
+    /**
+     * 모든 팀 정보 가져오기
+     * @return
+     */
     @GetMapping("/api/team")
     public List<TeamDto> requestAllTeam(){
         List<Team> findAllTeam= teamService.findTeams();
@@ -35,6 +45,20 @@ public class TeamController {
                 .collect(Collectors.toList());
 
         return collect;
+    }
+
+    /**
+     * 멤버 팀에 소속시키는 함수
+     * @param memberId
+     * @param teamId
+     */
+    @ResponseBody
+    @PutMapping("/api/member/{memberId}/team/{teamId}")
+    public void participapteInTeam(@PathVariable Long memberId, @PathVariable Long teamId){
+        Member findMember = memberService.findOne(memberId);
+        Team findTeam = teamService.findOne(teamId);
+
+        teamService.addMember(findMember,findTeam);
     }
     @Data
     class TeamDto{
@@ -55,13 +79,6 @@ public class TeamController {
         }
     }
 
-    @ResponseBody
-    @PutMapping("/api/member/{memberId}/team/{teamId}")
-    public void participapteInTeam(@PathVariable Long memberId, @PathVariable Long teamId){
-        Member findMember = memberService.findOne(memberId);
-        Team findTeam = teamService.findOne(teamId);
 
-        teamService.addMember(findMember,findTeam);
-    }
 
 }

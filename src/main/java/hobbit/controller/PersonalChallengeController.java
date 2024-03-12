@@ -16,6 +16,12 @@ import java.util.List;
 public class PersonalChallengeController {
     private final PersonalChallengeService personalChallengeService;
     private final MemberService memberService;
+
+    /**
+     * 멤버의 personalChallenge 가져오는 함수
+     * @param id
+     * @return
+     */
     @ResponseBody
     @GetMapping("/api/member/{id}/personal-challenges")
     public List<PersonalChallenge> getPersonalChallanges(@PathVariable Long id){
@@ -24,6 +30,7 @@ public class PersonalChallengeController {
     }
 
     /**
+     * 멤버의 etc목표 추가하는 함수
      * http://localhost:8080/api/member/1/startDay/personal-challenges/addEtcGoals?startDate=2024-03-15T15:00:00
      * @param memberId
      * @param startDate
