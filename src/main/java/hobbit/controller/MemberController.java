@@ -6,6 +6,7 @@ import hobbit.service.MemberService;
 import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -18,29 +19,68 @@ public class MemberController {
     private final MemberService memberService;
 
     /**
-     * 모든 멤버 정보 가져오기 - 실패
-     * @param id
-     * @return
-     */
-    @ResponseBody
-    @GetMapping("/api/member/test/{id}")
-    public Member getAllMemberData(@PathVariable Long id){
-        Member findMember = memberService.findOneAll(id);
-
-        return findMember;
-    }
-
-    /**
-     * 특정 맴버 가져오기
+     * Member의 모든 정보 가져오기
      * @param id
      * @return
      */
     @ResponseBody
     @GetMapping("/api/member/{id}")
-    public MemberDto requestMember(@PathVariable Long id){
+    public Member getAllMemberData(@PathVariable Long id){
         Member findMember = memberService.findOne(id);
 
-        return new MemberDto(findMember.getWeightRecords(),findMember.getCalorie(),findMember.getIntakedCalorie());
+        return findMember;
+    }
+
+    /**
+     * 멤버가 팀에 참가했는지 확인하는 API
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/api/memberWithTeam/{id}")
+    public ResponseEntity<Boolean> isMemberPartOfTeam(@PathVariable Long id) {
+        boolean isPartOfTeam = memberService.isMemberPartOfTeam(id);
+        return ResponseEntity.ok(isPartOfTeam);
+    }
+    /**
+     * 내 기록에서 맴버 가져오기
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/api/member/myRecord/{id}")
+    public MemberMyRecordDto requestMemberInProfile(@PathVariable Long id){
+        Member findMember = memberService.findOneWithRecords(id);
+
+        return new MemberMyRecordDto(findMember.getWeightRecords(),findMember.getCalorie(),findMember.getIntakedCalorie());
+    }
+
+    /**
+     * 첼린지 참가할때 사용하는 API
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/api/member/profile/{id}")
+    public MemberProfileDto requestMemberUserName(@PathVariable Long id){
+        Member findMember = memberService.findOne(id);
+
+        return new MemberProfileDto(findMember.getUserName());
+    }
+
+    /**
+     * Member의 팀에서 사용할 닉네임 추가 함수
+     * @param id
+     * @param teamUserName
+     * @return
+     */
+    @ResponseBody
+    @PutMapping("/api/member/{id}/teamUserName")
+    public Member addTeamUserNameRequest(@PathVariable Long id, @RequestParam String teamUserName){
+        memberService.updateTeamUserName(id,teamUserName);
+
+        Member findMember=memberService.findOne(id);
+        return findMember;
     }
 
     /**
@@ -52,28 +92,19 @@ public class MemberController {
     @ResponseBody
     // http://localhost:8080/api/member/1/weight?weight=68
     @PutMapping("/api/member/{id}/weight")
-    public MemberDto addWeightRequest(@PathVariable Long id, @RequestParam int weight) {
+    public MemberMyRecordDto addWeightRequest(@PathVariable Long id, @RequestParam int weight) {
         memberService.update(id,weight);
 
-        Member findMember=memberService.findOne(id);
-        return new MemberDto(findMember.getWeightRecords(),findMember.getCalorie(),findMember.getIntakedCalorie());
-    }
-
-    @ResponseBody
-    @PutMapping("/api/member/{id}/teamUserName")
-    public Member addTeamUserNameRequest(@PathVariable Long id, @RequestParam String teamUserName){
-        memberService.updateTeamUserName(id,teamUserName);
-
-        Member findMember=memberService.findOne(id);
-        return findMember;
+        Member findMember=memberService.findOneWithRecords(id);
+        return new MemberMyRecordDto(findMember.getWeightRecords(),findMember.getCalorie(),findMember.getIntakedCalorie());
     }
     @Data
-    static class MemberDto{
+    static class MemberMyRecordDto{
         private List<WeightRecordDto> weight;
         private int calorie;
         private int intakedCalorie;
 
-        public MemberDto(List<WeightRecord> weight, int calorie, int intakedCalorie) {
+        public MemberMyRecordDto(List<WeightRecord> weight, int calorie, int intakedCalorie) {
             this.weight=weight.stream()
                     .map(weights -> new WeightRecordDto(weights))
                     .collect(Collectors.toList());
@@ -91,5 +122,12 @@ public class MemberController {
             this.weight=weightRecord.getWeight();
         }
     }
+    @Data
+    static class MemberProfileDto{
+        private String userName;
 
+        public MemberProfileDto(String userName) {
+            this.userName=userName;
+        }
+    }
 }

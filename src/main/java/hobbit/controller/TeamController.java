@@ -62,6 +62,7 @@ public class TeamController {
     }
     @Data
     class TeamDto{
+        private Long id;
         private String teamName;
         private Integer maxTeamMemberNumber;
         private LocalDateTime startDate;
@@ -70,6 +71,7 @@ public class TeamController {
         private Integer numOfMember;
 
         public TeamDto(Team team) {
+            this.id=team.getId();
             this.teamName = team.getTeamName();
             this.maxTeamMemberNumber = team.getMaxTeamMemberNumber();
             this.startDate = team.getStartDate();

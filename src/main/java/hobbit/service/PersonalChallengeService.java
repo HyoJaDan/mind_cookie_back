@@ -17,8 +17,8 @@ import java.util.List;
 public class PersonalChallengeService {
     private final PersonalChallengeRepository personalChallengeRepository;
 
-    public List<PersonalChallenge> getPersonalChallengeRepositoryByMemberId(Long id){
-        return personalChallengeRepository.findPersonalChallengesByMemberId(id);
+    public List<EtcGoal> getPersonalChallengeRepositoryByMemberId(Long id){
+        return personalChallengeRepository.findTodayEtcGoalsByMemberId(id);
     }
 
     @Transactional
@@ -34,5 +34,11 @@ public class PersonalChallengeService {
             }
             personalChallengeRepository.savePersonalChallenge(personalChallenge);
         }
+    }
+
+    @Transactional
+    public void updateEtcGoalDoneStatus(Long etcGoalId, boolean done) {
+        personalChallengeRepository.updateEtcGoalDoneStatus(etcGoalId, done);
+
     }
 }

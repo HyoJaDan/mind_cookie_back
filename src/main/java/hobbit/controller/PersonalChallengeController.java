@@ -1,15 +1,16 @@
 package hobbit.controller;
 
-import hobbit.domain.Member;
-import hobbit.domain.PersonalChallenge;
-import hobbit.domain.Team;
+import hobbit.domain.*;
 import hobbit.service.MemberService;
 import hobbit.service.PersonalChallengeService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,16 +18,22 @@ public class PersonalChallengeController {
     private final PersonalChallengeService personalChallengeService;
     private final MemberService memberService;
 
+
     /**
-     * 멤버의 personalChallenge 가져오는 함수
+     * 멤버의 오늘 personalChallenge 가져오는 함수
      * @param id
      * @return
      */
     @ResponseBody
     @GetMapping("/api/member/{id}/personal-challenges")
-    public List<PersonalChallenge> getPersonalChallanges(@PathVariable Long id){
-        List<PersonalChallenge> findChallange= personalChallengeService.getPersonalChallengeRepositoryByMemberId(id);
-        return findChallange;
+    public List<EtcGoalDto> getPersonalChallanges(@PathVariable Long id){
+        List<EtcGoal> findChallange= personalChallengeService.getPersonalChallengeRepositoryByMemberId(id);
+
+        List<EtcGoalDto> collect = findChallange.stream()
+                .map(o ->new EtcGoalDto(o))
+                .collect(Collectors.toList());
+
+        return collect;
     }
 
     /**
@@ -41,5 +48,30 @@ public class PersonalChallengeController {
     public void addEtcGoals(@PathVariable Long memberId, @RequestParam LocalDateTime startDate, @RequestBody List<String> goals){
         Member findMember = memberService.findOne(memberId);
         personalChallengeService.initEtcGoals(findMember,startDate,goals);
+    }
+
+    /**
+     * etcGoal의 진행 여부 업데이트 API
+     * @param etcGoalId
+     * @param done
+     * @return
+     */
+    @PutMapping("/api/goals/{etcGoalId}/done")
+    public ResponseEntity<Void> updateEtcGoalDoneStatus(@PathVariable Long etcGoalId, @RequestParam boolean done) {
+        personalChallengeService.updateEtcGoalDoneStatus(etcGoalId, done);
+        return ResponseEntity.ok().build();
+    }
+
+    @Data
+    class EtcGoalDto{
+        private Long id;
+        private String goalName;
+        private Boolean isDone;
+
+        public EtcGoalDto(EtcGoal etcGoal) {
+            this.id=etcGoal.getId();
+            this.goalName=etcGoal.getGoalName();
+            this.isDone=etcGoal.isDone();
+        }
     }
 }

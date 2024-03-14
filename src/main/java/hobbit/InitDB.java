@@ -54,35 +54,18 @@ public class InitDB {
 
             em.persist(member);
 
-            //팀 넣기
-            LocalDateTime currentDateTime = LocalDateTime.now();
-            Team team=new Team();
-            //Team team = new Team("첫번째 팀",member, 5,currentDateTime, ChallngeType.reduce);
-            em.persist(team);
 
-            //PersonalChallenge 넣기
-            PersonalChallenge personalChallenge = new PersonalChallenge(LocalDate.now(), member);
-            em.persist(personalChallenge);
 
-            // EtcGoal 예시 추가
-            EtcGoal goal1 = new EtcGoal("아침 8시 기상", false, personalChallenge);
-            EtcGoal goal2 = new EtcGoal("출퇴근 자전거 타기", false, personalChallenge);
-            personalChallenge.addEtcGoal(goal1);
-            personalChallenge.addEtcGoal(goal2);
-            em.persist(goal1);
-            em.persist(goal2);
 
-            // MealRecord 예시 추가
-            MealRecord meal1 = new MealRecord("meal1.jpg", 500, LocalTime.now(), personalChallenge);
-            MealRecord meal2 = new MealRecord("meal2.jpg", 600, LocalTime.now().minusHours(5), personalChallenge);
-            personalChallenge.addMeal(meal1);
-            personalChallenge.addMeal(meal2);
-            em.persist(meal1);
-            em.persist(meal2);
         }
         public void dbInit2() {
             Member member = new Member("glass", 1998, Gender.female, 160 ,1900,1200);
             em.persist(member);
+
+            LocalDateTime currentDateTime = LocalDateTime.now();
+            //Team team=new Team();
+            Team team = new Team("첫번째 팀",member, 5,currentDateTime, ChallngeType.reduce);
+            em.persist(team);
         }
     }
 }

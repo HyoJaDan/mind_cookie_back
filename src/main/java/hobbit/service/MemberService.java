@@ -3,6 +3,8 @@ package hobbit.service;
 import hobbit.domain.Member;
 import hobbit.domain.WeightRecord;
 import hobbit.repository.MemberRepository;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,9 @@ public class MemberService {
 
     public Member findOne(Long id) {
         return memberRepository.findOne(id);
+    }
+    public Member findOneWithRecords(Long id) {
+        return memberRepository.findOneWithRecords(id);
     }
 
     public Member findOneAll(Long id){return memberRepository.findOneEveryThing(id);}
@@ -33,5 +38,14 @@ public class MemberService {
         Member member = memberRepository.findOne(id);
 
         member.setTeamUserName(userName);
+    }
+
+    public boolean isMemberPartOfTeam(Long id) {
+        try {
+            Member member = memberRepository.findMemberWithTeam(id);
+            return member.getTeam() != null;
+        } catch (NoResultException e) {
+            return false;
+        }
     }
 }
