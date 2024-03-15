@@ -37,6 +37,10 @@ public class Member {
     private int calorie;
     private int intakedCalorie;
 
+    public void setIntakedCalorie(int intakedCalorie) {
+        this.intakedCalorie = intakedCalorie;
+    }
+
     @OneToMany(mappedBy = "member", orphanRemoval = true)
     private List<PersonalChallenge> personalChallenges=new ArrayList<>();
 

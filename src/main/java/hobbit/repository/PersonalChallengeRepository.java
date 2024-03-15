@@ -1,8 +1,11 @@
 package hobbit.repository;
 
 import hobbit.domain.EtcGoal;
+import hobbit.domain.Exercise;
+import hobbit.domain.Member;
 import hobbit.domain.PersonalChallenge;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
@@ -13,7 +16,15 @@ import java.util.List;
 public class PersonalChallengeRepository {
     @PersistenceContext
     private EntityManager em;
-
+    public List<EtcGoal> findTodayGoalsByMemberId(Long memberId) { LocalDate today = LocalDate.now();
+        return em.createQuery(
+                        "select pc from PersonalChallenge pc " +
+                                "where pc.member.id = :Member_ID " +
+                                "and pc.date = :today", EtcGoal.class)
+                .setParameter("Member_ID", memberId)
+                .setParameter("today", today)
+                .getResultList();
+    }
     public List<EtcGoal> findTodayEtcGoalsByMemberId(Long memberId) {
         LocalDate today = LocalDate.now();
         return em.createQuery(
@@ -40,4 +51,5 @@ public class PersonalChallengeRepository {
                 .setParameter("etcGoalId", etcGoalId)
                 .executeUpdate();
     }
+
 }

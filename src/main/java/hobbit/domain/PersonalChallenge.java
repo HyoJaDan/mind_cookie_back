@@ -36,12 +36,17 @@ public class PersonalChallenge {
     @Embedded
     private Exercise exercise;
 
+    public void setExercise(Exercise exercise) {
+        this.exercise = exercise;
+    }
+
     public PersonalChallenge() {
     }
 
     public PersonalChallenge(LocalDate date, Member member) {
         this.date = date;
         this.member = member;
+        this.exercise=new Exercise();
     }
 
     public void addEtcGoal(EtcGoal etcGoal) {

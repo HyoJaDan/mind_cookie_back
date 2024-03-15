@@ -18,7 +18,6 @@ public class PersonalChallengeController {
     private final PersonalChallengeService personalChallengeService;
     private final MemberService memberService;
 
-
     /**
      * 멤버의 오늘 personalChallenge 가져오는 함수
      * @param id
@@ -26,8 +25,20 @@ public class PersonalChallengeController {
      */
     @ResponseBody
     @GetMapping("/api/member/{id}/personal-challenges")
-    public List<EtcGoalDto> getPersonalChallanges(@PathVariable Long id){
+    public List<EtcGoal> getPersonalChallanges(@PathVariable Long id){
         List<EtcGoal> findChallange= personalChallengeService.getPersonalChallengeRepositoryByMemberId(id);
+
+        return findChallange;
+    }
+    /**
+     * 멤버의 오늘 etc personalChallenge 가져오는 함수
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/api/member/{id}/etc-personal-challenges")
+    public List<EtcGoalDto> getEtcPersonalChallanges(@PathVariable Long id){
+        List<EtcGoal> findChallange= personalChallengeService.getEtcPersonalChallengeRepositoryByMemberId(id);
 
         List<EtcGoalDto> collect = findChallange.stream()
                 .map(o ->new EtcGoalDto(o))
@@ -62,6 +73,23 @@ public class PersonalChallengeController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * personalChallenge의 exercise를 업데이트 하는 API
+     * @param id
+     * @param dto
+     * @return
+     */
+    @PutMapping("/api/personal-challenge/{id}/exercise")
+    public ResponseEntity<Void> updateExercise(@PathVariable Long id, @RequestBody ExerciseUpdateDto dto) {
+        personalChallengeService.updateExerciseAndMemberCalorie(id, dto.getExerciseCalorie(), dto.isDone());
+        return ResponseEntity.ok().build();
+    }
+
+    @Data
+    private static class ExerciseUpdateDto {
+        private int exerciseCalorie;
+        private boolean done;
+    }
     @Data
     class EtcGoalDto{
         private Long id;
