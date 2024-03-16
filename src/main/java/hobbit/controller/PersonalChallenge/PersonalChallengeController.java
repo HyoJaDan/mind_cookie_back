@@ -1,5 +1,6 @@
-package hobbit.controller;
+package hobbit.controller.PersonalChallenge;
 
+import hobbit.controller.PersonalChallenge.PersonalChallengeStatusDTO;
 import hobbit.domain.*;
 import hobbit.service.MemberService;
 import hobbit.service.PersonalChallengeService;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,16 +36,16 @@ public class PersonalChallengeController {
      * @return
      */
     @ResponseBody
-    @GetMapping("/api/member/{id}/etc-personal-challenges")
-    public List<EtcGoalDto> getEtcPersonalChallanges(@PathVariable Long id){
-        List<EtcGoal> findChallange= personalChallengeService.getEtcPersonalChallengeRepositoryByMemberId(id);
-
-        List<EtcGoalDto> collect = findChallange.stream()
-                .map(o ->new EtcGoalDto(o))
-                .collect(Collectors.toList());
-
-        return collect;
+    @GetMapping("/api/member/{id}/today-personal-challenges")
+    public ResponseEntity<PersonalChallengeStatusDTO> getTodayPersonalChallenges(@PathVariable Long id) {
+        PersonalChallengeStatusDTO statusDto = personalChallengeService.getTodayPersonalChallengeStatusByMemberId(id);
+        if (statusDto.getStatus().equals("notFound")) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.ok(statusDto);
+        }
     }
+
 
     /**
      * 멤버의 etc목표 추가하는 함수
@@ -55,9 +55,9 @@ public class PersonalChallengeController {
      * @param goals
      */
     @ResponseBody
-    @PutMapping("/api/member/{memberId}/startDay/personal-challenges/addEtcGoals")
-    public void addEtcGoals(@PathVariable Long memberId, @RequestParam LocalDateTime startDate, @RequestBody List<String> goals){
-        Member findMember = memberService.findOne(memberId);
+    @PutMapping("/api/member/{id}/startDay/personal-challenges/addEtcGoals")
+    public void addEtcGoals(@PathVariable Long id, @RequestParam LocalDateTime startDate, @RequestBody List<String> goals){
+        Member findMember = memberService.findOne(id);
         personalChallengeService.initEtcGoals(findMember,startDate,goals);
     }
 
@@ -67,9 +67,9 @@ public class PersonalChallengeController {
      * @param done
      * @return
      */
-    @PutMapping("/api/goals/{etcGoalId}/done")
-    public ResponseEntity<Void> updateEtcGoalDoneStatus(@PathVariable Long etcGoalId, @RequestParam boolean done) {
-        personalChallengeService.updateEtcGoalDoneStatus(etcGoalId, done);
+    @PutMapping("/api/etc-personal-challenges/{id}/isDone")
+    public ResponseEntity<Void> updateEtcGoalDoneStatus(@PathVariable Long id, @RequestParam boolean isDone) {
+        personalChallengeService.updateEtcGoalDoneStatus(id, isDone);
         return ResponseEntity.ok().build();
     }
 
@@ -81,14 +81,15 @@ public class PersonalChallengeController {
      */
     @PutMapping("/api/personal-challenge/{id}/exercise")
     public ResponseEntity<Void> updateExercise(@PathVariable Long id, @RequestBody ExerciseUpdateDto dto) {
-        personalChallengeService.updateExerciseAndMemberCalorie(id, dto.getExerciseCalorie(), dto.isDone());
+        personalChallengeService.updateExerciseAndMemberCalorie(id, dto.getExerciseCalorie(),dto.durationInSeconds, dto.isDone());
         return ResponseEntity.ok().build();
     }
 
     @Data
     private static class ExerciseUpdateDto {
-        private int exerciseCalorie;
-        private boolean done;
+        private double exerciseCalorie;
+        private int durationInSeconds;
+        private boolean isDone;
     }
     @Data
     class EtcGoalDto{

@@ -37,7 +37,7 @@ public class MemberController {
      * @return
      */
     @ResponseBody
-    @GetMapping("/api/memberWithTeam/{id}")
+    @GetMapping("/api/member/{id}/isMemberWithTeam")
     public ResponseEntity<Boolean> isMemberPartOfTeam(@PathVariable Long id) {
         boolean isPartOfTeam = memberService.isMemberPartOfTeam(id);
         return ResponseEntity.ok(isPartOfTeam);
@@ -48,7 +48,7 @@ public class MemberController {
      * @return
      */
     @ResponseBody
-    @GetMapping("/api/member/myRecord/{id}")
+    @GetMapping("/api/member/{id}/myRecord")
     public MemberMyRecordDto requestMemberInProfile(@PathVariable Long id){
         Member findMember = memberService.findOneWithRecords(id);
 
@@ -61,7 +61,7 @@ public class MemberController {
      * @return
      */
     @ResponseBody
-    @GetMapping("/api/member/profile/{id}")
+    @GetMapping("/api/member/{id}/profile")
     public MemberProfileDto requestMemberUserName(@PathVariable Long id){
         Member findMember = memberService.findOne(id);
 
@@ -102,9 +102,9 @@ public class MemberController {
     static class MemberMyRecordDto{
         private List<WeightRecordDto> weight;
         private int calorie;
-        private int intakedCalorie;
+        private double intakedCalorie;
 
-        public MemberMyRecordDto(List<WeightRecord> weight, int calorie, int intakedCalorie) {
+        public MemberMyRecordDto(List<WeightRecord> weight, int calorie, double intakedCalorie) {
             this.weight=weight.stream()
                     .map(weights -> new WeightRecordDto(weights))
                     .collect(Collectors.toList());

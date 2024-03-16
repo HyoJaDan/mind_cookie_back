@@ -8,7 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Exercise {
-    private int exerciseCalorie;
+    private double exerciseCalorie;
+    private int durationInSeconds;
     private boolean isDone=false;
 
     public Exercise(){}

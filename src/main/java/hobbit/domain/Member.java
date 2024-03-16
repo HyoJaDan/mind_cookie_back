@@ -35,9 +35,9 @@ public class Member {
     }
 
     private int calorie;
-    private int intakedCalorie;
+    private double intakedCalorie;
 
-    public void setIntakedCalorie(int intakedCalorie) {
+    public void setIntakedCalorie(double intakedCalorie) {
         this.intakedCalorie = intakedCalorie;
     }
 
@@ -58,7 +58,7 @@ public class Member {
     }
 
     public Member(){}
-    public Member(String userName, int birthYear, Gender gender, int height, int calorie, int intakedCalorie) {
+    public Member(String userName, int birthYear, Gender gender, int height, int calorie, double intakedCalorie) {
         this.userName = userName;
         this.birthYear = birthYear;
         this.gender = gender;

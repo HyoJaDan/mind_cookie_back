@@ -1,5 +1,7 @@
 package hobbit.service;
 
+import hobbit.controller.PersonalChallenge.PersonalChallengeDTO;
+import hobbit.controller.PersonalChallenge.PersonalChallengeStatusDTO;
 import hobbit.domain.EtcGoal;
 import hobbit.domain.Exercise;
 import hobbit.domain.Member;
@@ -12,8 +14,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,9 +29,30 @@ public class PersonalChallengeService {
     public List<EtcGoal> getPersonalChallengeRepositoryByMemberId(Long id) {
         return personalChallengeRepository.findTodayGoalsByMemberId(id);
     }
-    public List<EtcGoal> getEtcPersonalChallengeRepositoryByMemberId(Long id){
-        return personalChallengeRepository.findTodayEtcGoalsByMemberId(id);
+
+    public PersonalChallengeStatusDTO getTodayPersonalChallengeStatusByMemberId(Long memberId) {
+        LocalDate today = LocalDate.now();
+        Optional<PersonalChallenge> challengeOpt = personalChallengeRepository.findTodayPersonalChallengeByMemberId(memberId);
+
+        if (!challengeOpt.isPresent()) {
+            // 첼린지가 존재하지 않는 경우
+            return new PersonalChallengeStatusDTO("notFound");
+        } else {
+            PersonalChallenge challenge = challengeOpt.get();
+            if (today.isBefore(challenge.getDate())) {
+                // 오늘 날짜가 첼린지 시작 날짜 전인 경우
+                return new PersonalChallengeStatusDTO("before");
+            } else if (today.isAfter(challenge.getDate())) {
+                // 오늘 날짜가 첼린지 시작 날짜 후인 경우
+                return new PersonalChallengeStatusDTO("after");
+            } else {
+                // 첼린지가 진행 중인 경우
+                return new PersonalChallengeStatusDTO("active", new PersonalChallengeDTO(challenge));
+            }
+        }
     }
+
+
 
     @Transactional
     public void initEtcGoals(Member member, LocalDateTime startDate, List<String> goals) {
@@ -51,7 +76,7 @@ public class PersonalChallengeService {
     }
 
     @Transactional
-    public void updateExerciseAndMemberCalorie(Long personalChallengeId, int exerciseCalorie, boolean isDone) {
+    public void updateExerciseAndMemberCalorie(Long personalChallengeId, double exerciseCalorie, int durationInSeconds, boolean isDone) {
         PersonalChallenge personalChallenge = em.find(PersonalChallenge.class, personalChallengeId);
         if (personalChallenge == null) {
             throw new EntityNotFoundException("PersonalChallenge not found");
@@ -65,6 +90,7 @@ public class PersonalChallengeService {
         // Exercise 업데이트 로직
         exercise.setExerciseCalorie(exerciseCalorie);
         exercise.setDone(isDone);
+        exercise.setDurationInSeconds(durationInSeconds);
 
         // Member의 intakedCalorie 조정
         Member member = personalChallenge.getMember();

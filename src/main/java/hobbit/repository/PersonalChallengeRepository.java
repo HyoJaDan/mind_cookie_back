@@ -6,17 +6,20 @@ import hobbit.domain.Member;
 import hobbit.domain.PersonalChallenge;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PersonalChallengeRepository {
     @PersistenceContext
     private EntityManager em;
-    public List<EtcGoal> findTodayGoalsByMemberId(Long memberId) { LocalDate today = LocalDate.now();
+    public List<EtcGoal> findTodayGoalsByMemberId(Long memberId) {
+        LocalDate today = LocalDate.now();
         return em.createQuery(
                         "select pc from PersonalChallenge pc " +
                                 "where pc.member.id = :Member_ID " +
@@ -25,17 +28,22 @@ public class PersonalChallengeRepository {
                 .setParameter("today", today)
                 .getResultList();
     }
-    public List<EtcGoal> findTodayEtcGoalsByMemberId(Long memberId) {
+    public Optional<PersonalChallenge> findTodayPersonalChallengeByMemberId(Long memberId) {
         LocalDate today = LocalDate.now();
-        return em.createQuery(
-                        "select eg from PersonalChallenge pc " +
-                                "join pc.etcGoals eg " +
-                                "where pc.member.id = :Member_ID " +
-                                "and pc.date = :today", EtcGoal.class)
-                .setParameter("Member_ID", memberId)
-                .setParameter("today", today)
-                .getResultList();
+        try {
+            return Optional.of(em.createQuery(
+                            "select pc from PersonalChallenge pc " +
+                                    "join fetch pc.etcGoals " +
+                                    "where pc.member.id = :Member_ID " +
+                                    "and pc.date = :today", PersonalChallenge.class)
+                    .setParameter("Member_ID", memberId)
+                    .setParameter("today", today)
+                    .getSingleResult());
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
+
 
     public void saveEtcGoal(EtcGoal etcGoal) {
         em.persist(etcGoal);
