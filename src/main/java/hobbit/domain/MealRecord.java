@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hobbit.controller.MealRecord.MealRecordDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 
 @Entity
 @Table(name = "meal_record")
@@ -15,6 +18,11 @@ public class MealRecord {
     private Long id;
 
     private LocalDateTime createdTime;
+
+    public void setCreatedTime(LocalDateTime createdTime) {
+        this.createdTime = createdTime;
+    }
+
     private int calorie;
 
     public void setCalorie(int calorie) {
@@ -57,6 +65,12 @@ public class MealRecord {
 
     public static MealRecord toSaveFileEntity(MealRecordDTO mealRecordDTO,Picture picture) {
         MealRecord mealRecord = new MealRecord();
+
+        Instant instant = Instant.parse(mealRecordDTO.getCreatedTime());
+        // Instant를 시스템 기본 시간대의 LocalDateTime으로 변환
+        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+
+        mealRecord.setCreatedTime(dateTime);
         mealRecord.setCalorie(mealRecordDTO.getCalorie());
         mealRecord.setContent(mealRecordDTO.getContent());
         mealRecord.addPicture(picture);

@@ -26,7 +26,7 @@ public class MealRecordService {
         String originalFileName = mealRecordDTO.getOriginalFileName();
         String storedFileName = System.currentTimeMillis() + "_" + originalFileName;
 
-        String savePath = "/Users/jun/3.\\ backend-develop/picture"+storedFileName;
+        String savePath = "/Users/jun/picture"+storedFileName;
         boardFile.transferTo(new File(savePath));
         // 여기까지 경로에 이미지 저장
 
@@ -35,8 +35,10 @@ public class MealRecordService {
         PersonalChallenge todayPersonalChallenge = personalChallengeRepository.findTodayGoalsByMemberId(memberId);
         // 2 MealRecord의 Picture 선언
         Picture picture = Picture.toPictureEntity(mealRecordDTO.getOriginalFileName(),mealRecordDTO.getStoredFileName());
+        mealRecordRepository.savePicture(picture);
         // 3. MealRecord 선언
         MealRecord mealRecord = MealRecord.toSaveFileEntity(mealRecordDTO,picture);
+        mealRecordRepository.saveMealRecord(mealRecord);
         // 4. 1번에서 찾았던 personalChallenge에 mealRecord 추가 ( 양방향이라 2,3번 선언했던 것들이 모두 연관됨 )
         todayPersonalChallenge.addMealRecord(mealRecord);
     }

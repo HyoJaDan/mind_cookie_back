@@ -13,7 +13,7 @@ public class MealRecordController {
     private final MealRecordService mealRecordService;
 
     @PostMapping("api/member/{memberId}/todayPersonalChallenge/saveMealRecord")
-    public void save(@PathVariable Long memberId, @RequestBody MealRecordDTO mealRecordDTO) throws IOException {
+    public void save(@PathVariable Long memberId, @ModelAttribute MealRecordDTO mealRecordDTO) throws IOException {
         mealRecordService.save(memberId,mealRecordDTO);
     }
 }

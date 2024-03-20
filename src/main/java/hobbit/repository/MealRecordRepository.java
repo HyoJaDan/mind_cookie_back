@@ -2,6 +2,7 @@ package hobbit.repository;
 
 import hobbit.controller.MealRecord.MealRecordDTO;
 import hobbit.domain.MealRecord;
+import hobbit.domain.Picture;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -39,5 +40,13 @@ public class MealRecordRepository {
                 .setParameter("content", newContent)
                 .setParameter("id", id)
                 .executeUpdate();
+    }
+
+    public void savePicture(Picture picture) {
+        em.persist(picture);
+    }
+
+    public void saveMealRecord(MealRecord mealRecord) {
+        em.persist(mealRecord);
     }
 }
