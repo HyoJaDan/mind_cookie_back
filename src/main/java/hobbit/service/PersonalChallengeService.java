@@ -26,7 +26,7 @@ public class PersonalChallengeService {
     @PersistenceContext
     private EntityManager em;
     private final PersonalChallengeRepository personalChallengeRepository;
-    public List<EtcGoal> getPersonalChallengeRepositoryByMemberId(Long id) {
+    public PersonalChallenge getPersonalChallengeRepositoryByMemberId(Long id) {
         return personalChallengeRepository.findTodayGoalsByMemberId(id);
     }
 

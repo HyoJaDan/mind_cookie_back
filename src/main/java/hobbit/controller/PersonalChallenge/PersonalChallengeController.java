@@ -25,10 +25,10 @@ public class PersonalChallengeController {
      */
     @ResponseBody
     @GetMapping("/api/member/{id}/personal-challenges")
-    public List<EtcGoal> getPersonalChallanges(@PathVariable Long id){
-        List<EtcGoal> findChallange= personalChallengeService.getPersonalChallengeRepositoryByMemberId(id);
+    public PersonalChallenge getPersonalChallanges(@PathVariable Long id){
+        PersonalChallenge personalChallenge= personalChallengeService.getPersonalChallengeRepositoryByMemberId(id);
 
-        return findChallange;
+        return personalChallenge;
     }
     /**
      * 멤버의 오늘 etc personalChallenge 가져오는 함수

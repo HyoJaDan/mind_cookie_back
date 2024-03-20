@@ -28,16 +28,20 @@ public class PersonalChallenge {
     @OneToMany(mappedBy = "personalChallenge", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EtcGoal> etcGoals=new ArrayList<>();
 
-    // 식단 기록
-    @OneToMany(mappedBy = "personalChallenge", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MealRecord> meals=new ArrayList<>();
-
     // 운동 기록
     @Embedded
     private Exercise exercise;
 
     public void setExercise(Exercise exercise) {
         this.exercise = exercise;
+    }
+
+    @OneToMany(mappedBy = "personalChallenge", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MealRecord> mealRecords=new ArrayList<>();
+
+    public void addMealRecord(MealRecord mealRecord){
+        mealRecords.add(mealRecord);
+        mealRecord.setPersonalChallenge(this);
     }
 
     public PersonalChallenge() {
@@ -52,10 +56,5 @@ public class PersonalChallenge {
     public void addEtcGoal(EtcGoal etcGoal) {
         etcGoals.add(etcGoal);
         etcGoal.setPersonalChallenge(this);
-    }
-
-    public void addMeal(MealRecord meal) {
-        meals.add(meal);
-        meal.setPersonalChallenge(this);
     }
 }

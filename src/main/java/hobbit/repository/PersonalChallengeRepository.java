@@ -18,15 +18,15 @@ import java.util.Optional;
 public class PersonalChallengeRepository {
     @PersistenceContext
     private EntityManager em;
-    public List<EtcGoal> findTodayGoalsByMemberId(Long memberId) {
+    public PersonalChallenge findTodayGoalsByMemberId(Long memberId) {
         LocalDate today = LocalDate.now();
         return em.createQuery(
                         "select pc from PersonalChallenge pc " +
                                 "where pc.member.id = :Member_ID " +
-                                "and pc.date = :today", EtcGoal.class)
+                                "and pc.date = :today", PersonalChallenge.class)
                 .setParameter("Member_ID", memberId)
                 .setParameter("today", today)
-                .getResultList();
+                .getSingleResult();
     }
     public Optional<PersonalChallenge> findTodayPersonalChallengeByMemberId(Long memberId) {
         LocalDate today = LocalDate.now();
