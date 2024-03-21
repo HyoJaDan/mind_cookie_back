@@ -80,7 +80,4 @@ public class TeamController {
             this.numOfMember = team.getMembers().size();
         }
     }
-
-
-
 }

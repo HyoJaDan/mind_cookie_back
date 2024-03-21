@@ -5,13 +5,11 @@ import hobbit.domain.Exercise;
 import hobbit.domain.Member;
 import hobbit.domain.PersonalChallenge;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 
 @Repository

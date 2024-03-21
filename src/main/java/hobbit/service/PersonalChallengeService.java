@@ -2,10 +2,8 @@ package hobbit.service;
 
 import hobbit.controller.PersonalChallenge.PersonalChallengeDTO;
 import hobbit.controller.PersonalChallenge.PersonalChallengeStatusDTO;
-import hobbit.domain.EtcGoal;
-import hobbit.domain.Exercise;
-import hobbit.domain.Member;
-import hobbit.domain.PersonalChallenge;
+import hobbit.domain.*;
+import hobbit.repository.MealRecordRepository;
 import hobbit.repository.PersonalChallengeRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -26,6 +24,7 @@ public class PersonalChallengeService {
     @PersistenceContext
     private EntityManager em;
     private final PersonalChallengeRepository personalChallengeRepository;
+    private final MealRecordRepository mealRecordRepository;
     public PersonalChallenge getPersonalChallengeRepositoryByMemberId(Long id) {
         return personalChallengeRepository.findTodayGoalsByMemberId(id);
     }
@@ -47,7 +46,15 @@ public class PersonalChallengeService {
                 return new PersonalChallengeStatusDTO("after");
             } else {
                 // 첼린지가 진행 중인 경우
-                return new PersonalChallengeStatusDTO("active", new PersonalChallengeDTO(challenge));
+                Optional<List<MealRecord>> todayMealRecordByMemberId = mealRecordRepository.getTodayMealRecordByMemberId(memberId);
+                if(!todayMealRecordByMemberId.isPresent()) {
+                    //음식 이미지가 존재하지 않을 경우
+                    return new PersonalChallengeStatusDTO("active", new PersonalChallengeDTO(challenge));
+                } else {
+                    List<MealRecord> mealRecords = todayMealRecordByMemberId.get();
+                    return new PersonalChallengeStatusDTO("active", new PersonalChallengeDTO(challenge,mealRecords));
+                }
+
             }
         }
     }

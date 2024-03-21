@@ -1,7 +1,6 @@
 package hobbit.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import hobbit.controller.MealRecord.MealRecordDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -18,13 +17,23 @@ public class MealRecord {
     private Long id;
 
     private LocalDateTime createdTime;
-
     public void setCreatedTime(LocalDateTime createdTime) {
         this.createdTime = createdTime;
     }
 
-    private int calorie;
+    @Enumerated(EnumType.STRING)
+    private RecordType recordType;
 
+    public void setRecordType(RecordType recordType) {
+        this.recordType = recordType;
+    }
+
+    private String title;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    private int calorie;
     public void setCalorie(int calorie) {
         this.calorie = calorie;
     }
@@ -57,22 +66,23 @@ public class MealRecord {
     public MealRecord() {
     }
 
-    public MealRecord(int calorie, LocalTime time,String content, PersonalChallenge personalChallenge) {
-        this.calorie = calorie;
-        this.content = content;
-        this.personalChallenge = personalChallenge;
+    public MealRecord(RecordType recordType, String title) {
+        this.recordType=recordType;
+        this.title=title;
     }
 
-    public static MealRecord toSaveFileEntity(MealRecordDTO mealRecordDTO,Picture picture) {
+    public static MealRecord toSaveFileEntity(String createdTime, int calorie, String content, Picture picture, String title,RecordType type) {
         MealRecord mealRecord = new MealRecord();
 
-        Instant instant = Instant.parse(mealRecordDTO.getCreatedTime());
+        Instant instant = Instant.parse(createdTime);
         // Instant를 시스템 기본 시간대의 LocalDateTime으로 변환
         LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
 
+        mealRecord.setTitle(title);
+        mealRecord.setRecordType(type);
         mealRecord.setCreatedTime(dateTime);
-        mealRecord.setCalorie(mealRecordDTO.getCalorie());
-        mealRecord.setContent(mealRecordDTO.getContent());
+        mealRecord.setCalorie(calorie);
+        mealRecord.setContent(content);
         mealRecord.addPicture(picture);
         return mealRecord;
     }

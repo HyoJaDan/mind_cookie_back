@@ -1,9 +1,9 @@
 package hobbit.service;
 
-import hobbit.controller.MealRecord.MealRecordDTO;
 import hobbit.domain.MealRecord;
 import hobbit.domain.PersonalChallenge;
 import hobbit.domain.Picture;
+import hobbit.domain.RecordType;
 import hobbit.repository.MealRecordRepository;
 import hobbit.repository.PersonalChallengeRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,12 +21,12 @@ public class MealRecordService {
     private final MealRecordRepository mealRecordRepository;
     private final PersonalChallengeRepository personalChallengeRepository;
     @Transactional
-    public void save(Long memberId, MealRecordDTO mealRecordDTO) throws IOException {
-        MultipartFile boardFile = mealRecordDTO.getBoardFile();
-        String originalFileName = mealRecordDTO.getOriginalFileName();
+    public void save(Long memberId, int calorie, String content, String createdTime, MultipartFile inputedBoardFile, String title, RecordType type) throws IOException {
+        MultipartFile boardFile = inputedBoardFile;
+        String originalFileName = inputedBoardFile.getOriginalFilename();
         String storedFileName = System.currentTimeMillis() + "_" + originalFileName;
 
-        String savePath = "/Users/jun/picture"+storedFileName;
+        String savePath = "/Users/jun/picture/" + storedFileName;
         boardFile.transferTo(new File(savePath));
         // 여기까지 경로에 이미지 저장
 
@@ -34,12 +34,18 @@ public class MealRecordService {
         // 1.id로 받아온 personalChallenge 가져오기
         PersonalChallenge todayPersonalChallenge = personalChallengeRepository.findTodayGoalsByMemberId(memberId);
         // 2 MealRecord의 Picture 선언
-        Picture picture = Picture.toPictureEntity(mealRecordDTO.getOriginalFileName(),mealRecordDTO.getStoredFileName());
+        Picture picture = Picture.toPictureEntity(inputedBoardFile.getOriginalFilename(), storedFileName);
         mealRecordRepository.savePicture(picture);
         // 3. MealRecord 선언
-        MealRecord mealRecord = MealRecord.toSaveFileEntity(mealRecordDTO,picture);
+        MealRecord mealRecord = MealRecord.toSaveFileEntity(createdTime,calorie,content,picture,title,type);
         mealRecordRepository.saveMealRecord(mealRecord);
         // 4. 1번에서 찾았던 personalChallenge에 mealRecord 추가 ( 양방향이라 2,3번 선언했던 것들이 모두 연관됨 )
         todayPersonalChallenge.addMealRecord(mealRecord);
+        System.out.println(picture.getStoredFileName());
+        System.out.println(picture.getOriginalFileName());
+    }
+    //List<Optional<MealRecord>>
+    public void get(Long memberId) {
+        //return mealRecordRepository.getTodayMealRecordByMemberId(memberId);
     }
 }

@@ -1,13 +1,11 @@
 package hobbit.controller.PersonalChallenge;
-
-import hobbit.controller.PersonalChallenge.PersonalChallengeDTO;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 public class PersonalChallengeStatusDTO {
-    private String status; // "before", "active", "after"
+    private String status; // "before", "active", "after", "not Found"
     private PersonalChallengeDTO challenge;
 
     // Constructor for status without challenge data

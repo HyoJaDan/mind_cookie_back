@@ -31,7 +31,7 @@ public class PersonalChallengeController {
         return personalChallenge;
     }
     /**
-     * 멤버의 오늘 etc personalChallenge 가져오는 함수
+     * 멤버의 오늘 personalChallenge 가져오는 함수
      * @param id
      * @return
      */

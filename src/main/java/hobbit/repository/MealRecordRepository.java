@@ -1,12 +1,16 @@
 package hobbit.repository;
 
-import hobbit.controller.MealRecord.MealRecordDTO;
 import hobbit.domain.MealRecord;
 import hobbit.domain.Picture;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class MealRecordRepository {
@@ -48,5 +52,23 @@ public class MealRecordRepository {
 
     public void saveMealRecord(MealRecord mealRecord) {
         em.persist(mealRecord);
+    }
+
+    public Optional<List<MealRecord>> getTodayMealRecordByMemberId(Long memberId) {
+        LocalDate today = LocalDate.now();
+        try {
+            return Optional.of(em.createQuery(
+                            "select mr from MealRecord mr " +
+                                    "join fetch mr.picture " +
+                                    "join fetch mr.personalChallenge pc " +
+                                    "where pc.member.id = :Member_ID " +
+                                    "and pc.date = :today", MealRecord.class)
+                    .setParameter("Member_ID", memberId)
+                    .setParameter("today", today)
+                    .getResultList());
+        } catch (NoResultException e){
+            return Optional.empty();
+        }
+
     }
 }
