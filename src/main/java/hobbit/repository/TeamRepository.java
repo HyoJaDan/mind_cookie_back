@@ -29,5 +29,11 @@ public class TeamRepository {
 
         return result;
     }
+    public List<Long> findMemberIdsByTeamId(Long teamId) {
+        return em.createQuery(
+                        "SELECT m.id FROM Member m WHERE m.team.id = :teamId", Long.class)
+                .setParameter("teamId", teamId)
+                .getResultList();
+    }
 
 }

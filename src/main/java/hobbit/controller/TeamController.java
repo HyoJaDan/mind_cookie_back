@@ -5,6 +5,7 @@ import hobbit.domain.Member;
 import hobbit.domain.Team;
 import hobbit.repository.TeamRepository;
 import hobbit.service.MemberService;
+import hobbit.service.PersonalChallengeService;
 import hobbit.service.TeamService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,6 @@ import java.util.stream.Collectors;
 public class TeamController {
     private final TeamService teamService;
     private final MemberService memberService;
-
     /**
      * 팀 하나 정보 가져오기
      * @param id
@@ -45,6 +45,12 @@ public class TeamController {
                 .collect(Collectors.toList());
 
         return collect;
+    }
+    @ResponseBody
+    @GetMapping("api/team/{id}/getEveryData")
+    public List<Object> getAllMemberId(@PathVariable Long id){
+        List<Object> todayPersonalChallengeStatusByTeamId = teamService.getTodayPersonalChallengeStatusByTeamId(id);
+        return todayPersonalChallengeStatusByTeamId;
     }
 
     /**

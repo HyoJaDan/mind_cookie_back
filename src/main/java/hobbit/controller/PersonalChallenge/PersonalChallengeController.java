@@ -45,8 +45,6 @@ public class PersonalChallengeController {
             return ResponseEntity.ok(statusDto);
         }
     }
-
-
     /**
      * 멤버의 etc목표 추가하는 함수
      * http://localhost:8080/api/member/1/startDay/personal-challenges/addEtcGoals?startDate=2024-03-15T15:00:00

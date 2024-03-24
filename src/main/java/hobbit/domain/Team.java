@@ -17,12 +17,11 @@ public class Team {
 
     @OneToMany(mappedBy = "team")
     private List<Member> members = new ArrayList<>();
-    private Integer maxTeamMemberNumber;
     public void addTeamMember(Member member){
         members.add(member);
         member.setTeam(this);
     }
-
+    private Integer maxTeamMemberNumber;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
