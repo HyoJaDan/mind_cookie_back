@@ -1,10 +1,8 @@
 package hobbit.service;
 
-import hobbit.domain.MealRecord;
-import hobbit.domain.PersonalChallenge;
-import hobbit.domain.Picture;
-import hobbit.domain.RecordType;
+import hobbit.domain.*;
 import hobbit.repository.MealRecordRepository;
+import hobbit.repository.MemberRepository;
 import hobbit.repository.PersonalChallengeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +18,7 @@ import java.io.IOException;
 public class MealRecordService {
     private final MealRecordRepository mealRecordRepository;
     private final PersonalChallengeRepository personalChallengeRepository;
+    private final MemberRepository memberRepository;
     @Transactional
     public void save(Long memberId, int calorie, String content, String createdTime, MultipartFile inputedBoardFile, String title, RecordType type) throws IOException {
         MultipartFile boardFile = inputedBoardFile;
@@ -41,10 +40,12 @@ public class MealRecordService {
         mealRecordRepository.saveMealRecord(mealRecord);
         // 4. 1번에서 찾았던 personalChallenge에 mealRecord 추가 ( 양방향이라 2,3번 선언했던 것들이 모두 연관됨 )
         todayPersonalChallenge.addMealRecord(mealRecord);
-        System.out.println(picture.getStoredFileName());
-        System.out.println(picture.getOriginalFileName());
+
+        // 멤버의 칼로리 업데이트
+        Member findMember = memberRepository.findOne(memberId);
+        findMember.setIntakedCalorie(findMember.getIntakedCalorie()+calorie);
     }
-    //List<Optional<MealRecord>>
+
     public void get(Long memberId) {
         //return mealRecordRepository.getTodayMealRecordByMemberId(memberId);
     }

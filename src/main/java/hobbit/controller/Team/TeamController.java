@@ -1,11 +1,10 @@
-package hobbit.controller;
+package hobbit.controller.Team;
 
+import hobbit.controller.Team.TeamChallengeDTO;
 import hobbit.domain.ChallngeType;
 import hobbit.domain.Member;
 import hobbit.domain.Team;
-import hobbit.repository.TeamRepository;
 import hobbit.service.MemberService;
-import hobbit.service.PersonalChallengeService;
 import hobbit.service.TeamService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -48,8 +47,8 @@ public class TeamController {
     }
     @ResponseBody
     @GetMapping("api/team/{id}/getEveryData")
-    public List<Object> getAllMemberId(@PathVariable Long id){
-        List<Object> todayPersonalChallengeStatusByTeamId = teamService.getTodayPersonalChallengeStatusByTeamId(id);
+    public TeamChallengeDTO getAllMemberId(@PathVariable Long id){
+        TeamChallengeDTO todayPersonalChallengeStatusByTeamId = teamService.getTodayPersonalChallengeStatusByTeamId(id);
         return todayPersonalChallengeStatusByTeamId;
     }
 

@@ -53,17 +53,12 @@ public class InitDB {
             member.addWeightRecord(weightRecord4);
 
             em.persist(member);
-
-
-
-
         }
         public void dbInit2() {
             Member member = new Member("glass", 1998, Gender.female, 160 ,1900,1200);
             em.persist(member);
 
             LocalDateTime currentDateTime = LocalDateTime.now();
-            //Team team=new Team();
             Team team = new Team("첫번째 팀",member, 5,currentDateTime, ChallngeType.reduce);
             em.persist(team);
         }
