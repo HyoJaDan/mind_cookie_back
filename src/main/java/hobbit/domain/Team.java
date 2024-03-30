@@ -3,6 +3,7 @@ package hobbit.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +23,17 @@ public class Team {
         member.setTeam(this);
     }
     private Integer maxTeamMemberNumber;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     // startDate 설정 메소드
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
         this.endDate = calculateEndDate(startDate);
     }
 
     // endDate를 startDate로부터 35일 후로 계산하는 메소드
-    private LocalDateTime calculateEndDate(LocalDateTime startDate) {
+    private LocalDate calculateEndDate(LocalDate startDate) {
         return startDate.plusDays(35);
     }
 
@@ -41,7 +42,7 @@ public class Team {
 
 
     public Team(){}
-    public Team(String teamName, Member member,Integer maxTeamMemberNumber, LocalDateTime startDate, ChallngeType challengeType) {
+    public Team(String teamName, Member member,Integer maxTeamMemberNumber, LocalDate startDate, ChallngeType challengeType) {
         this.teamName = teamName;
         addTeamMember(member);
         this.maxTeamMemberNumber = maxTeamMemberNumber;

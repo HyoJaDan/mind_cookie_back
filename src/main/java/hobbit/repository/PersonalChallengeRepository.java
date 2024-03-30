@@ -10,6 +10,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -42,6 +43,11 @@ public class PersonalChallengeRepository {
         }
     }
 
+    public List<PersonalChallenge> findAllByMemberId(Long memberId) {
+        return em.createQuery("select pc from PersonalChallenge pc where pc.member.id = :Member_ID", PersonalChallenge.class)
+                .setParameter("Member_ID", memberId)
+                .getResultList();
+    }
 
     public void saveEtcGoal(EtcGoal etcGoal) {
         em.persist(etcGoal);

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,11 +39,14 @@ public class PersonalChallengeController {
     @ResponseBody
     @GetMapping("/api/member/{id}/today-personal-challenges")
     public ResponseEntity<PersonalChallengeStatusDTO> getTodayPersonalChallenges(@PathVariable Long id) {
-        PersonalChallengeStatusDTO statusDto = personalChallengeService.getTodayPersonalChallengeStatusByMemberId(id);
-        if (statusDto.getStatus().equals("notFound")) {
-            return ResponseEntity.notFound().build();
+        //PersonalChallengeStatusDTO statusDto = personalChallengeService.getTodayPersonalChallengeStatusByMemberId(id);
+        PersonalChallengeStatusDTO statusDTO2 = personalChallengeService.getPersonalChallengeStatusByMemberId(id);
+        if (statusDTO2.getStatus().equals("notFound")) {
+            //return ResponseEntity.notFound().build();
+
+            return ResponseEntity.ok(statusDTO2);
         } else {
-            return ResponseEntity.ok(statusDto);
+            return ResponseEntity.ok(statusDTO2);
         }
     }
     /**
@@ -54,7 +58,7 @@ public class PersonalChallengeController {
      */
     @ResponseBody
     @PutMapping("/api/member/{id}/startDay/personal-challenges/addEtcGoals")
-    public void addEtcGoals(@PathVariable Long id, @RequestParam LocalDateTime startDate, @RequestBody List<String> goals){
+    public void addEtcGoals(@PathVariable Long id, @RequestParam LocalDate startDate, @RequestBody List<String> goals){
         Member findMember = memberService.findOne(id);
         personalChallengeService.initEtcGoals(findMember,startDate,goals);
     }

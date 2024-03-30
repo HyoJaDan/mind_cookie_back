@@ -13,8 +13,8 @@ import java.util.List;
 @Data
 public class TeamChallengeDTO {
     private String teamName;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int totalEtcGoals;
     private int completedEtcGoals;
     private int completedExercises;

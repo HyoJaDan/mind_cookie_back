@@ -1,6 +1,5 @@
 package hobbit.controller.Team;
 
-import hobbit.controller.Team.TeamChallengeDTO;
 import hobbit.domain.ChallngeType;
 import hobbit.domain.Member;
 import hobbit.domain.Team;
@@ -10,7 +9,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +18,17 @@ import java.util.stream.Collectors;
 public class TeamController {
     private final TeamService teamService;
     private final MemberService memberService;
+
+    /**
+     * 팀을 생성하는 API
+     * @param getTeamDTO
+     */
+    @PostMapping("/api/team/create-team")
+    public void createTeam(@RequestBody getTeamDTO getTeamDTO){
+        Member findMember = memberService.findOne(getTeamDTO.memberId);
+
+        teamService.createTeam(findMember,getTeamDTO.teamName,getTeamDTO.startDate,getTeamDTO.challngeType);
+    }
     /**
      * 팀 하나 정보 가져오기
      * @param id
@@ -70,8 +80,8 @@ public class TeamController {
         private Long id;
         private String teamName;
         private Integer maxTeamMemberNumber;
-        private LocalDateTime startDate;
-        private LocalDateTime endDate;
+        private LocalDate startDate;
+        private LocalDate endDate;
         private ChallngeType challngeType;
         private Integer numOfMember;
 
@@ -84,5 +94,12 @@ public class TeamController {
             this.challngeType = team.getChallengeType();
             this.numOfMember = team.getMembers().size();
         }
+    }
+    @Data
+    private static class getTeamDTO{
+        private Long memberId;
+        private String teamName;
+        private LocalDate startDate;
+        private ChallngeType challngeType;
     }
 }

@@ -14,6 +14,11 @@ import java.util.List;
 public class TeamRepository {
     @PersistenceContext
     private EntityManager em;
+
+    public void saveTeam(Team team) {
+        em.persist(team);
+    }
+
     public Team findOne(Long id) {
         return em.createQuery(
                         "select t from Team t"+
@@ -28,6 +33,11 @@ public class TeamRepository {
                 .getResultList();
 
         return result;
+    }
+    public Team findTeamByMemberId(Long memberId) {
+        return em.createQuery("select m.team from Member m where m.id = :memberId", Team.class)
+                .setParameter("memberId", memberId)
+                .getSingleResult();
     }
     public List<Long> findMemberIdsByTeamId(Long teamId) {
         return em.createQuery(

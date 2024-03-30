@@ -58,7 +58,7 @@ public class InitDB {
             Member member = new Member("glass", 1998, Gender.female, 160 ,1900,1200);
             em.persist(member);
 
-            LocalDateTime currentDateTime = LocalDateTime.now();
+            LocalDate currentDateTime = LocalDate.now();
             Team team = new Team("첫번째 팀",member, 5,currentDateTime, ChallngeType.reduce);
             em.persist(team);
         }

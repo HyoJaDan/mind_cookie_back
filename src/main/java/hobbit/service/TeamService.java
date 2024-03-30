@@ -2,6 +2,7 @@ package hobbit.service;
 
 
 import hobbit.controller.Team.TeamChallengeDTO;
+import hobbit.controller.Team.TeamController;
 import hobbit.domain.*;
 import hobbit.repository.MealRecordRepository;
 import hobbit.repository.MemberRepository;
@@ -11,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -74,5 +77,13 @@ public class TeamService {
     @Transactional
     public void addMember(Member findMember, Team findTeam) {
         findTeam.addTeamMember(findMember);
+    }
+    public Team getTeamByMemberId(Long memberId) {
+        return teamRepository.findTeamByMemberId(memberId);
+    }
+    @Transactional
+    public void createTeam(Member findMember, String teamName, LocalDate startDate, ChallngeType challngeType) {
+        Team team = new Team(teamName,findMember,5,startDate,challngeType);
+        teamRepository.saveTeam(team);
     }
 }
