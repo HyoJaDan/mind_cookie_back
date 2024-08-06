@@ -1,4 +1,4 @@
-package hobbit.exception;
+package mindCookie.exception;
 
 public class NotEnoughtStockException extends RuntimeException {
 
