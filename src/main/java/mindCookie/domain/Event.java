@@ -2,6 +2,7 @@ package mindCookie.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import mindCookie.Util;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,7 +21,9 @@ public class Event {
     private List<String> participants;
     private String which_activity;
     private String emotion;
-    private byte emotion_rate;
+    private byte emotionRate;
+
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_EVENT_ID")
@@ -28,5 +31,19 @@ public class Event {
 
     public void setMember(Member member) {
         this.member=member;
+    }
+
+    public void setEmotionRate(byte emotionRate) {
+        byte Rate = Util.validateRate(emotionRate);
+
+        this.emotionRate = Rate;
+    }
+    protected  Event(){}
+    public Event(LocalDate date, List<String> participants, String which_activity, String emotion, byte emotionRate) {
+        this.date = date;
+        this.participants = participants;
+        this.which_activity = which_activity;
+        this.emotion = emotion;
+        setEmotionRate(emotionRate);
     }
 }

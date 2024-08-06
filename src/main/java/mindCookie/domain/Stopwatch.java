@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "stopwatch")
@@ -17,7 +18,7 @@ public class Stopwatch {
     private Long id;
 
     private LocalDate date;
-    private LocalDateTime time;
+    private LocalTime time;
     private String target;
 
 
@@ -27,5 +28,12 @@ public class Stopwatch {
 
     public void setMember(Member member) {
         this.member = member;
+    }
+
+    protected Stopwatch(){}
+    public Stopwatch(LocalDate date, LocalTime time, String target) {
+        this.date = date;
+        this.time = time;
+        this.target = target;
     }
 }

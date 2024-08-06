@@ -56,4 +56,5 @@ public class Member {
         this.event_emotions = event_emotions;
         this.stopwatch_target = stopwatch_target;
     }
+
 }
