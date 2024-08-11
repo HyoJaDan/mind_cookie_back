@@ -1,5 +1,6 @@
 package mindCookie.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -23,6 +24,7 @@ public class Stopwatch {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_STOPWATCH_ID")
+    @JsonIgnore
     private Member member;
 
     public void setMember(Member member) {

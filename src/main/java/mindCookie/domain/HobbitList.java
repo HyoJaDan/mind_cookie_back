@@ -1,5 +1,6 @@
 package mindCookie.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 
@@ -20,6 +21,7 @@ public class HobbitList {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_HOBBIT_LIST_ID")
+    @JsonIgnore
     private Member member;
     public void setMember(Member member) {
         this.member=member;

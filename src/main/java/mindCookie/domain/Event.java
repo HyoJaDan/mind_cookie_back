@@ -1,5 +1,6 @@
 package mindCookie.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import mindCookie.global.uilts.Util;
@@ -27,6 +28,7 @@ public class Event {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_EVENT_ID")
+    @JsonIgnore
     private Member member;
 
     public void setMember(Member member) {

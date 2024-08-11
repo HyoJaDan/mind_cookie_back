@@ -58,7 +58,7 @@ public class InitDB {
             /**
              * stopwatch 엔티티 추가
              */
-            LocalDate date = LocalDate.of(2024, 8, 6);
+            LocalDate date = LocalDate.of(2024, 8, 11);
             LocalTime time = LocalTime.of(12, 30, 15); // 12시 30분 15초
             String target = "운동";
 

@@ -1,5 +1,6 @@
 package mindCookie.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import mindCookie.global.uilts.Util;
@@ -44,17 +45,18 @@ public class State {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_STATE_ID")
+    @JsonIgnore
     private Member member;
 
     public void setMember(Member member) {
         this.member=member;
     }
-
+    protected  State(){}
     public State(LocalDate date, byte positive, byte negative, byte lifeSatisfaction, byte physicalConnection) {
         this.date = date;
-        this.positive = positive;
-        this.negative = negative;
-        this.lifeSatisfaction = lifeSatisfaction;
-        this.physicalConnection = physicalConnection;
+        setPositive(positive);
+        setNegative(negative);
+        setLifeSatisfaction(lifeSatisfaction);
+        setPhysicalConnection(physicalConnection);
     }
 }
