@@ -11,7 +11,6 @@ import java.time.LocalTime;
 @Table(name = "stopwatch")
 @Getter
 public class Stopwatch {
-
     @Id
     @Column(name = "STOPWATCH_ID")
     @GeneratedValue

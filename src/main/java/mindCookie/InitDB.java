@@ -35,13 +35,6 @@ public class InitDB {
         private final EntityManager em;
         public void dbInit1() {
             /**
-             *     private List<String> event_participants;
-             *     private List<String> event_activities;
-             *     private List<String> event_emotions;
-             *     private List<String> stopwatch_target;
-             */
-
-            /**
              * 멤버 엔티티 추가
              */
             List<String> event_participants = new ArrayList<>();
