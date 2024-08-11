@@ -24,6 +24,6 @@ public class StateController {
     @PutMapping("api/member/{id}/myState")
     public BaseResponse<State> putStateRequest(@PathVariable Long id, @RequestBody StateDTO stateDTO){
         stateService.updateOrCreateState(id, stateDTO);
-        return new BaseResponse<>(BaseResponseCode.SUCCESS_STATE);
+        return new BaseResponse<>(BaseResponseCode.SUCCESS_STATE_UPDATE);
     }
 }
