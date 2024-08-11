@@ -2,7 +2,6 @@ package mindCookie.repository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import mindCookie.domain.State;
 import org.springframework.stereotype.Repository;
 
@@ -25,10 +24,5 @@ public class StateRepository {
                 .getResultList()
                 .stream()
                 .findFirst();
-    }
-
-    @Transactional
-    public void save(State state) {
-        em.persist(state);
     }
 }

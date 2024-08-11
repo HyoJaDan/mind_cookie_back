@@ -29,17 +29,14 @@ public class StateService {
     }
 
     @Transactional
-    public State updateOrCreateState(Long memberId, StateDTO getStateDTO) {
+    public void updateOrCreateState(Long memberId, StateDTO getStateDTO) {
         LocalDate today = LocalDate.now();
 
-        // Member 조회
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(MemberNotFoundException::new);
 
-        // 오늘의 State 조회
         Optional<State> optionalState = stateRepository.findByDate(memberId, today);
 
-        // State 가 존재하면 업데이트, 존재하지 않으면 생성
         State state;
         if (optionalState.isPresent()) {
             state = optionalState.get();
@@ -50,11 +47,7 @@ public class StateService {
         } else {
             state = new State(today, getStateDTO.getPositive(), getStateDTO.getNegative(),
                     getStateDTO.getLifeSatisfaction(), getStateDTO.getPhysicalCondition());
-//            state.setMember(member);
             member.addStates(state);
-//            stateRepository.save(state);
         }
-
-        return state;
     }
 }
