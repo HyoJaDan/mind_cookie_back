@@ -2,7 +2,7 @@ package mindCookie.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import mindCookie.Util;
+import mindCookie.global.uilts.Util;
 
 import java.time.LocalDate;
 import java.util.List;

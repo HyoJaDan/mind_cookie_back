@@ -1,4 +1,4 @@
-package mindCookie;
+package mindCookie.global.uilts;
 
 public class Util {
     public static byte validateRate(byte rate) {

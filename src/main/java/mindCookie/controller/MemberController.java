@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class MeberController {
+public class MemberController {
     private final MemberService memberService;
-
 
     @ResponseBody
     @GetMapping("api/member/{id}")
     public BaseResponse<Member> getMemberData(@PathVariable Long id){
-        Member findMember = memberService.findOne(id);
+        Member findMember = memberService.getMemberById(id);
 
         return new BaseResponse<>(findMember, BaseResponseCode.SUCCESS);
     }
