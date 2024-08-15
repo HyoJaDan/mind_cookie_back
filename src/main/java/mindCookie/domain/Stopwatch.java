@@ -19,6 +19,9 @@ public class Stopwatch {
 
     private LocalDate date;
     private LocalTime time;
+    public void updateTime(LocalTime time) {
+        this.time=time;
+    }
     private String target;
 
 

@@ -53,6 +53,36 @@ public class StopwatchService {
     }
 
     @Transactional
+    public void updateStopwatchTime(Long id, String target, LocalTime time) {
+        LocalDate today = LocalDate.now();
+
+        // 오늘 날짜와 특정 target에 해당하는 스탑워치를 가져옴
+        Optional<List<Stopwatch>> todayStopwatchList = stopwatchRepository.findByDate(id, today);
+
+        if (todayStopwatchList.isPresent()) {
+            Stopwatch stopwatch = todayStopwatchList.get().stream()
+                    .filter(s -> s.getTarget().equals(target))
+                    .findFirst()
+                    .orElse(null);
+
+            if (stopwatch != null) {
+                // 시간 업데이트
+                stopwatch.updateTime(time);
+            } else {
+                // 만약 오늘의 타겟이 없으면 새로운 스탑워치 엔티티를 생성
+                Member findMember = memberService.getMemberById(id);
+                Stopwatch newStopwatch = new Stopwatch(today, time, target);
+                findMember.addStopwatches(newStopwatch);
+            }
+        } else {
+            // 오늘 날짜의 기록이 아예 없을 경우, 새로운 스탑워치 엔티티를 생성
+            Member findMember = memberService.getMemberById(id);
+            Stopwatch newStopwatch = new Stopwatch(today, time, target);
+            findMember.addStopwatches(newStopwatch);
+        }
+    }
+
+    @Transactional
     public void addStopwatchTarget(Long id, String newTarget) {
         Member findMember = memberService.getMemberById(id);
         findMember.addStopwatch_target(newTarget);

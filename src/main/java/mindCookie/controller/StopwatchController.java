@@ -30,6 +30,20 @@ public class StopwatchController {
     }
 
     /**
+     * 오늘 스탑워치 업데이트 하는 API
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @PutMapping("/member/{id}/stopwatch/update-time")
+    public BaseResponse<StateDTO> stopStopwatch(
+            @PathVariable Long id,
+            @RequestBody StopwatchDTO stopwatchDTO
+    ){
+        stopwatchService.updateStopwatchTime(id, stopwatchDTO.getTarget(),stopwatchDTO.getTime());
+        return new BaseResponse<>(BaseResponseCode.SUCCESS_STOPWATCH_UPDATE);
+    }
+    /**
      * 스탑워치 리스트를 추가하는 api
      * PUT /member/1/add-stopwatch-target?add=target_name
      * @param id
