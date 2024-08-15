@@ -16,7 +16,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @ResponseBody
-    @GetMapping("api/member/{id}")
+    @GetMapping("/member/{id}")
     public BaseResponse<Member> getMemberData(@PathVariable Long id){
         Member findMember = memberService.getMemberById(id);
 

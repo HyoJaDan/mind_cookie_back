@@ -21,6 +21,13 @@ public class Member {
     private List<String> event_emotions;
     private List<String> stopwatch_target;
 
+    public void addStopwatch_target(String stopwatch_target) {
+        this.stopwatch_target.add(stopwatch_target);
+    }
+    public void removeStopwatch_target(String targetToRemove){
+        this.stopwatch_target.remove(targetToRemove);
+    }
+
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Stopwatch> stopwatches = new ArrayList<>();
     public void addStopwatches(Stopwatch newStopwatch) {
