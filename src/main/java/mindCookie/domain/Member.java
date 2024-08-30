@@ -56,7 +56,12 @@ public class Member {
         hobbit.setMember(this);
     }
 
-    public Member(){}
+    public Member(){
+        this.event_participants = new ArrayList<>();
+        this.event_activities = new ArrayList<>();
+        this.event_emotions = new ArrayList<>();
+        this.stopwatch_target = new ArrayList<>();
+    }
     public Member(List<String> event_participants, List<String> event_activities, List<String> event_emotions, List<String> stopwatch_target) {
         this.event_participants = event_participants;
         this.event_activities = event_activities;
