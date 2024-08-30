@@ -15,6 +15,8 @@ public class Member {
     @Column(name = "MEMBER_ID")
     @GeneratedValue
     private Long id;
+    private String username;
+    private String password;
 
     private List<String> event_participants;
     private List<String> event_activities;
@@ -62,11 +64,17 @@ public class Member {
         this.event_emotions = new ArrayList<>();
         this.stopwatch_target = new ArrayList<>();
     }
-    public Member(List<String> event_participants, List<String> event_activities, List<String> event_emotions, List<String> stopwatch_target) {
+    public Member(String username,
+                  String password,
+                  List<String> event_participants,
+                  List<String> event_activities,
+                  List<String> event_emotions,
+                  List<String> stopwatch_target) {
+        this.username = username;
+        this.password = password;
         this.event_participants = event_participants;
         this.event_activities = event_activities;
         this.event_emotions = event_emotions;
         this.stopwatch_target = stopwatch_target;
     }
-
 }

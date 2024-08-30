@@ -5,7 +5,6 @@ import mindCookie.domain.Event;
 import mindCookie.domain.Member;
 import mindCookie.dto.EventDTO;
 import mindCookie.repository.EventRepository;
-import mindCookie.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
