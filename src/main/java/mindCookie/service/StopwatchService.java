@@ -6,6 +6,7 @@ import mindCookie.domain.Stopwatch;
 import mindCookie.dto.StopwatchDTO;
 import mindCookie.repository.MemberRepository;
 import mindCookie.repository.StopwatchRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,9 @@ public class StopwatchService {
     private final StopwatchRepository stopwatchRepository;
     private final MemberService memberService;
 
-    public List<StopwatchDTO> findTodayStopwatchList(Long id) {
+    public List<StopwatchDTO> findTodayStopwatchList(Authentication authentication) {
+        Long id = memberService.getMemberId(authentication);
+
         LocalDate today = LocalDate.now();
         Optional<List<Stopwatch>> todayStopwatchList = stopwatchRepository.findByDate(id, today);
         List<StopwatchDTO> returnValue = new ArrayList<>();
@@ -53,7 +56,8 @@ public class StopwatchService {
     }
 
     @Transactional
-    public void updateStopwatchTime(Long id, String target, LocalTime time) {
+    public void updateStopwatchTime(Authentication authentication, String target, LocalTime time) {
+        Long id = memberService.getMemberId(authentication);
         LocalDate today = LocalDate.now();
 
         // 오늘 날짜와 특정 target에 해당하는 스탑워치를 가져옴
@@ -83,13 +87,17 @@ public class StopwatchService {
     }
 
     @Transactional
-    public void addStopwatchTarget(Long id, String newTarget) {
+    public void addStopwatchTarget(Authentication authentication, String newTarget) {
+        Long id = memberService.getMemberId(authentication);
+
         Member findMember = memberService.getMemberById(id);
         findMember.addStopwatch_target(newTarget);
     }
 
     @Transactional
-    public void removeStopwatchTarget(Long id, String targetToRemove) {
+    public void removeStopwatchTarget(Authentication authentication, String targetToRemove) {
+        Long id = memberService.getMemberId(authentication);
+
         Member findMember = memberService.getMemberById(id);
         findMember.removeStopwatch_target(targetToRemove);
     }

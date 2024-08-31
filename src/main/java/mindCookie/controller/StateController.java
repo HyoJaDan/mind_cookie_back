@@ -6,6 +6,7 @@ import mindCookie.dto.StateDTO;
 import mindCookie.global.response.BaseResponse;
 import mindCookie.global.response.BaseResponseCode;
 import mindCookie.service.StateService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,16 +15,16 @@ public class StateController {
     private final StateService stateService;
 
     @ResponseBody
-    @GetMapping("/member/{id}/myState")
-    public BaseResponse<StateDTO> getStateRequest(@PathVariable Long id){
-        State todayState = stateService.findTodayState(id);
+    @GetMapping("/myState")
+    public BaseResponse<StateDTO> getStateRequest(Authentication authentication){
+        State todayState = stateService.findTodayState(authentication);
         StateDTO returnValue = new StateDTO(todayState.getPositive(),todayState.getNegative(),todayState.getLifeSatisfaction(),todayState.getPhysicalConnection());
         return new BaseResponse<>(returnValue, BaseResponseCode.SUCCESS);
     }
     @ResponseBody
-    @PutMapping("/member/{id}/myState")
-    public BaseResponse<State> putStateRequest(@PathVariable Long id, @RequestBody StateDTO stateDTO){
-        stateService.updateOrCreateState(id, stateDTO);
+    @PutMapping("/myState")
+    public BaseResponse<State> putStateRequest(Authentication authentication, @RequestBody StateDTO stateDTO){
+        stateService.updateOrCreateState(authentication, stateDTO);
         return new BaseResponse<>(BaseResponseCode.SUCCESS_STATE_UPDATE);
     }
 }

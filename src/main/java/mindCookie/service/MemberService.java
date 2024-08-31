@@ -3,6 +3,7 @@ package mindCookie.service;
 import lombok.RequiredArgsConstructor;
 import mindCookie.domain.Member;
 import mindCookie.dto.EventInfoDTO;
+import mindCookie.dto.MemberDTO;
 import mindCookie.exception.MemberNotFoundException;
 import mindCookie.repository.MemberRepository;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
@@ -19,18 +20,29 @@ import java.util.List;
 public class MemberService {
     private final MemberRepository memberRepository;
 
+    public Long getMemberId(Authentication authentication){
+        // Authentication 객체에서 사용자 이름(username) 추출
+        String username = authentication.getName();
+
+        Member findMember = memberRepository.findByUsername(username)
+                .orElseThrow(MemberNotFoundException::new);
+        return findMember.getId();
+    }
     public Member getMemberById(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(MemberNotFoundException::new);
     }
-    public Member getMemberByUserName(Authentication authentication) {
+    public MemberDTO getMemberByUserName(Authentication authentication) {
         // Authentication 객체에서 사용자 이름(username) 추출
         String username = authentication.getName();
 
-        return memberRepository.findByUsername(username)
+        Member findMember = memberRepository.findByUsername(username)
                 .orElseThrow(MemberNotFoundException::new);
+        return new MemberDTO(findMember);
     }
-    public EventInfoDTO getMemberEventInfo(Long id){
+    public EventInfoDTO getMemberEventInfo(Authentication authentication){
+        Long id = getMemberId(authentication);
+
         Member findMember = memberRepository.findById(id)
                 .orElseThrow(MemberNotFoundException::new);
 

@@ -7,6 +7,7 @@ import mindCookie.global.response.BaseResponse;
 import mindCookie.global.response.BaseResponseCode;
 import mindCookie.service.EventService;
 import mindCookie.service.MemberService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,9 +28,9 @@ public class EventController {
      *         - 기타 오류
      */
     @ResponseBody
-    @GetMapping("member/{id}/event-info")
-    public BaseResponse<EventInfoDTO> getEventInfo(@PathVariable Long id){
-        return new BaseResponse<>(memberService.getMemberEventInfo(id), BaseResponseCode.SUCCESS);
+    @GetMapping("/event-info")
+    public BaseResponse<EventInfoDTO> getEventInfo(Authentication authentication){
+        return new BaseResponse<>(memberService.getMemberEventInfo(authentication), BaseResponseCode.SUCCESS);
     }
 
     /**
@@ -41,9 +42,9 @@ public class EventController {
      *         - emotion_rate : byte
      */
     @ResponseBody
-    @GetMapping("member/{id}/event-list")
-    public BaseResponse<List<EventDTO>> getEventList(@PathVariable Long id){
-         return new BaseResponse<>(eventService.getEventListByDate(id),BaseResponseCode.SUCCESS);
+    @GetMapping("/event-list")
+    public BaseResponse<List<EventDTO>> getEventList(Authentication authentication){
+         return new BaseResponse<>(eventService.getEventListByDate(authentication),BaseResponseCode.SUCCESS);
     }
     /**
      * - `PUT` : 금일 event List를 추가하는 API : `/api/member/{id}/event`
@@ -56,9 +57,9 @@ public class EventController {
      *         - emotion_rate : byte
      */
     @ResponseBody
-    @PutMapping("member/{id}/event")
-    public BaseResponse<Void> PutEvent(@PathVariable Long id, @RequestBody EventDTO eventDTO){
-        eventService.addEvent(id, eventDTO);
+    @PutMapping("/event")
+    public BaseResponse<Void> PutEvent(Authentication authentication, @RequestBody EventDTO eventDTO){
+        eventService.addEvent(authentication, eventDTO);
         return new BaseResponse<>(BaseResponseCode.SUCCESS_PUT_EVENT);
     }
 }

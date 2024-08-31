@@ -8,6 +8,7 @@ import mindCookie.exception.MemberNotFoundException;
 import mindCookie.exception.StateNotFoundException;
 import mindCookie.repository.MemberRepository;
 import mindCookie.repository.StateRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,8 +21,9 @@ import java.util.Optional;
 public class StateService {
     private final StateRepository stateRepository;
     private final MemberRepository memberRepository;
-
-    public State findTodayState(Long id) {
+    private final MemberService memberService;
+    public State findTodayState(Authentication authentication) {
+        Long id = memberService.getMemberId(authentication);
         LocalDate today = LocalDate.now();
 
         return stateRepository.findByDate(id, today)
@@ -29,13 +31,14 @@ public class StateService {
     }
 
     @Transactional
-    public void updateOrCreateState(Long memberId, StateDTO getStateDTO) {
+    public void updateOrCreateState(Authentication authentication, StateDTO getStateDTO) {
+        Long id = memberService.getMemberId(authentication);
         LocalDate today = LocalDate.now();
 
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findById(id)
                 .orElseThrow(MemberNotFoundException::new);
 
-        Optional<State> optionalState = stateRepository.findByDate(memberId, today);
+        Optional<State> optionalState = stateRepository.findByDate(id, today);
 
         State state;
         if (optionalState.isPresent()) {

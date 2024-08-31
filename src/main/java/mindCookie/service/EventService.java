@@ -5,6 +5,7 @@ import mindCookie.domain.Event;
 import mindCookie.domain.Member;
 import mindCookie.dto.EventDTO;
 import mindCookie.repository.EventRepository;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,9 +19,11 @@ import java.util.stream.Collectors;
 public class EventService {
     private final EventRepository eventRepository;
     private final MemberService memberService;
-    public List<EventDTO> getEventListByDate(Long memberId) {
+    public List<EventDTO> getEventListByDate(Authentication authentication) {
+        Long id = memberService.getMemberId(authentication);
+
         LocalDate today = LocalDate.now();
-        Optional<List<Event>> findEvent = eventRepository.findEventsByMemberAndDate(memberId, today);
+        Optional<List<Event>> findEvent = eventRepository.findEventsByMemberAndDate(id, today);
 
         return findEvent
                 .map(events -> events.stream()
@@ -37,7 +40,9 @@ public class EventService {
     }
 
     @Transactional
-    public void addEvent(Long memberId, EventDTO eventDTO) {
+    public void addEvent(Authentication authentication, EventDTO eventDTO) {
+        Long memberId = memberService.getMemberId(authentication);
+
         Member findMember = memberService.getMemberById(memberId);
 
         addIfAbsent(findMember.getEvent_participants(),eventDTO.getParticipants());

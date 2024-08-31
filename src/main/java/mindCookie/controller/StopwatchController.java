@@ -6,6 +6,7 @@ import mindCookie.dto.StopwatchDTO;
 import mindCookie.global.response.BaseResponse;
 import mindCookie.global.response.BaseResponseCode;
 import mindCookie.service.StopwatchService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,9 +23,9 @@ public class StopwatchController {
      * @return
      */
     @ResponseBody
-    @GetMapping("/member/{id}/stopwatch/today")
-    public BaseResponse<List<StopwatchDTO>> getStopwatch(@PathVariable Long id){
-        List<StopwatchDTO> stopwatches = stopwatchService.findTodayStopwatchList(id);
+    @GetMapping("/stopwatch/today")
+    public BaseResponse<List<StopwatchDTO>> getStopwatch(Authentication authentication){
+        List<StopwatchDTO> stopwatches = stopwatchService.findTodayStopwatchList(authentication);
         return new BaseResponse<>(stopwatches, BaseResponseCode.SUCCESS);
     }
 
@@ -34,12 +35,9 @@ public class StopwatchController {
      * @return
      */
     @ResponseBody
-    @PutMapping("/member/{id}/stopwatch/update-time")
-    public BaseResponse<StateDTO> stopStopwatch(
-            @PathVariable Long id,
-            @RequestBody StopwatchDTO stopwatchDTO
-    ){
-        stopwatchService.updateStopwatchTime(id, stopwatchDTO.getTarget(),stopwatchDTO.getTime());
+    @PutMapping("/stopwatch/update-time")
+    public BaseResponse<StateDTO> stopStopwatch(Authentication authentication, @RequestBody StopwatchDTO stopwatchDTO){
+        stopwatchService.updateStopwatchTime(authentication, stopwatchDTO.getTarget(),stopwatchDTO.getTime());
         return new BaseResponse<>(BaseResponseCode.SUCCESS_STOPWATCH_UPDATE);
     }
     /**
@@ -50,11 +48,11 @@ public class StopwatchController {
      * @return
      */
     @ResponseBody
-    @PutMapping("/member/{id}/add-stopwatch-target")
+    @PutMapping("/add-stopwatch-target")
     public BaseResponse<StateDTO> putStopwatchTarget(
-            @PathVariable Long id,
+            Authentication authentication,
             @RequestParam String add) {
-        stopwatchService.addStopwatchTarget(id,add);
+        stopwatchService.addStopwatchTarget(authentication,add);
         return new BaseResponse<>(BaseResponseCode.SUCCESS_STOPWATCH_UPDATE);
     }
     /**
@@ -65,11 +63,11 @@ public class StopwatchController {
      * @return
      */
     @ResponseBody
-    @PutMapping("/member/{id}/remove-stopwatch-target")
+    @PutMapping("/remove-stopwatch-target")
     public BaseResponse<StateDTO> removeStopwatchTarget(
-            @PathVariable Long id,
+            Authentication authentication,
             @RequestParam String targetToRemove) {
-        stopwatchService.removeStopwatchTarget(id, targetToRemove);
+        stopwatchService.removeStopwatchTarget(authentication, targetToRemove);
         return new BaseResponse<>(BaseResponseCode.SUCCESS_STOPWATCH_UPDATE);
     }
 }

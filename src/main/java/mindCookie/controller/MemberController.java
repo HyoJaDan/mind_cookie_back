@@ -2,6 +2,7 @@ package mindCookie.controller;
 
 import lombok.RequiredArgsConstructor;
 import mindCookie.domain.Member;
+import mindCookie.dto.MemberDTO;
 import mindCookie.global.response.BaseResponse;
 import mindCookie.global.response.BaseResponseCode;
 import mindCookie.service.MemberService;
@@ -18,8 +19,8 @@ public class MemberController {
 
     @ResponseBody
     @GetMapping("/member")
-    public BaseResponse<Member> getMember(Authentication authentication){
-        Member findMember = memberService.getMemberByUserName(authentication);
+    public BaseResponse<MemberDTO> getMember(Authentication authentication){
+        MemberDTO findMember = memberService.getMemberByUserName(authentication);
         return new BaseResponse<>(findMember, BaseResponseCode.SUCCESS);
     }
     @ResponseBody
