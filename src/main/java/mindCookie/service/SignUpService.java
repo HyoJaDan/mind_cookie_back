@@ -2,6 +2,7 @@ package mindCookie.service;
 
 import lombok.RequiredArgsConstructor;
 import mindCookie.domain.Member;
+import mindCookie.domain.Role;
 import mindCookie.dto.SignUpDTO;
 import mindCookie.repository.MemberRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,7 +35,7 @@ public class SignUpService {
         List<String> eventEmotions = new ArrayList<>();
         List<String> stopwatchTarget = new ArrayList<>();
 
-        Member member = new Member(username, encodedPassword, eventParticipants, eventActivities, eventEmotions, stopwatchTarget);
+        Member member = new Member(username, encodedPassword, Role.USER,eventParticipants, eventActivities, eventEmotions, stopwatchTarget);
 
         memberRepository.save(member);
         return true;

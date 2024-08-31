@@ -5,6 +5,7 @@ import mindCookie.domain.Member;
 import mindCookie.global.response.BaseResponse;
 import mindCookie.global.response.BaseResponseCode;
 import mindCookie.service.MemberService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
     private final MemberService memberService;
 
+    @ResponseBody
+    @GetMapping("/member")
+    public BaseResponse<Member> getMember(Authentication authentication){
+        Member findMember = memberService.getMemberByUserName(authentication);
+        return new BaseResponse<>(findMember, BaseResponseCode.SUCCESS);
+    }
     @ResponseBody
     @GetMapping("/member/{id}")
     public BaseResponse<Member> getMemberData(@PathVariable Long id){

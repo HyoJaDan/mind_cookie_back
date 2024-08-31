@@ -18,6 +18,9 @@ public class Member {
     private String username;
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     private List<String> event_participants;
     private List<String> event_activities;
     private List<String> event_emotions;
@@ -66,12 +69,14 @@ public class Member {
     }
     public Member(String username,
                   String password,
+                  Role role, // role 추가
                   List<String> event_participants,
                   List<String> event_activities,
                   List<String> event_emotions,
                   List<String> stopwatch_target) {
         this.username = username;
         this.password = password;
+        this.role = role;
         this.event_participants = event_participants;
         this.event_activities = event_activities;
         this.event_emotions = event_emotions;
