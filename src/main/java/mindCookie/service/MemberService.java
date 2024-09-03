@@ -8,6 +8,7 @@ import mindCookie.exception.MemberNotFoundException;
 import mindCookie.repository.MemberRepository;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,13 +33,13 @@ public class MemberService {
         return memberRepository.findById(id)
                 .orElseThrow(MemberNotFoundException::new);
     }
-    public MemberDTO getMemberByUserName(Authentication authentication) {
+    public Member getMemberByUserName() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         // Authentication 객체에서 사용자 이름(username) 추출
-        String username = authentication.getName();
 
         Member findMember = memberRepository.findByUsername(username)
                 .orElseThrow(MemberNotFoundException::new);
-        return new MemberDTO(findMember);
+        return findMember;
     }
     public EventInfoDTO getMemberEventInfo(Authentication authentication){
         Long id = getMemberId(authentication);

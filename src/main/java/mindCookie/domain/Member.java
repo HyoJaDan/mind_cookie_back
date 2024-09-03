@@ -55,10 +55,10 @@ public class Member {
     }
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<HobbitList> hobbitList = new ArrayList<>();
-    public void addHobbit(HobbitList hobbit){
-        hobbitList.add(hobbit);
-        hobbit.setMember(this);
+    private List<PrimaryHobbit> primaryHobbits = new ArrayList<>();
+    public void addPrimaryHobbit(PrimaryHobbit primaryHobbit){
+        primaryHobbits.add(primaryHobbit);
+        primaryHobbit.setMember(this);
     }
 
     public Member(){

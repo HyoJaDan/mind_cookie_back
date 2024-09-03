@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
 
-//    @ExceptionHandler(MemberNotFoundException.class)
-//    public ResponseEntity<BaseResponse<Void>> handleMemberNotFoundException(MemberNotFoundException ex) {
-//        BaseResponse<Void> response = new BaseResponse<>(BaseResponseCode.FAIL);
-//        return ResponseEntity.status(BaseResponseCode.FAIL.getStatus()).body(response);
-//    }
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ResponseEntity<BaseResponse<Void>> handleMemberNotFoundException(MemberNotFoundException ex) {
+        BaseResponse<Void> response = new BaseResponse<>(BaseResponseCode.FAIL);
+        return ResponseEntity.status(BaseResponseCode.FAIL.getStatus()).body(response);
+    }
 
     @ExceptionHandler(value = EntityNotFoundException.class)
     public ResponseEntity<BaseResponse> handleEntityNotFoundException(EntityNotFoundException e,

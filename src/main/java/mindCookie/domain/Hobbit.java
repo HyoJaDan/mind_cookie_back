@@ -8,31 +8,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "hobbitList")
+@Table(name = "hobbit")
 @Getter
-public class HobbitList {
+public class Hobbit {
     @Id
-    @Column(name = "HOBBIT_LIST_ID")
+    @Column(name = "HOBBIT_ID")
     @GeneratedValue
     private Long id;
-
     private String goalName;
-    private String primaryGoal;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_HOBBIT_LIST_ID")
+    @JoinColumn(name = "PRIMARY_HOBBIT_HOBBIT_ID")
     @JsonIgnore
-    private Member member;
-    public void setMember(Member member) {
-        this.member=member;
-    }
+    private PrimaryHobbit primaryHobbit;
 
-    @OneToMany(mappedBy = "hobbitList", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hobbit", cascade = CascadeType.ALL)
     private List<DailyHobbitStatus> dailyHobbitStatus = new ArrayList<>();
+
+    public void setPrimaryHobbit(PrimaryHobbit primaryHobbit) {
+        this.primaryHobbit=primaryHobbit;
+    }
     public void addDailyHobbitStatus(DailyHobbitStatus status) {
         dailyHobbitStatus.add(status);
         status.setHobbitList(this);
     }
 
-
+    public void addGoalName(String goalName) {
+        this.goalName=goalName;
+    }
 }

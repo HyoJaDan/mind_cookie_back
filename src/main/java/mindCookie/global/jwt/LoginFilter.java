@@ -79,7 +79,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         // 추출한 username 과 role을 기반으로 JWT 토큰 생성
 
-        String token = jwtUtil.createJwt(username, role, 365 * 24 * 60 * 60L);
+        String token = jwtUtil.createJwt(username, role, 365 * 24 * 60 * 60L * 1000);
         //String token = jwtUtil.createJwt(username, role, 60*60*10L); // 인자 : username, role, 유효시간(임의로 36,000초인 10시간으로 지정)
         // jwt 토큰을 응답 헤더에 담기
         response.addHeader("Authorization","Bearer " + token); // 접두사 "Bearer " 필수. cf) HTTP 인증 방식은 RFC 7235 정의에 따라 ‘ Authorization: 타입 인증토큰 ‘과 같은 인증 헤더 형태를 가져아 한다. ex) 'Authorization: Bearer 인증토큰'

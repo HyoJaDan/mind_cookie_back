@@ -6,7 +6,6 @@ import mindCookie.dto.MemberDTO;
 import mindCookie.global.response.BaseResponse;
 import mindCookie.global.response.BaseResponseCode;
 import mindCookie.service.MemberService;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,9 +18,10 @@ public class MemberController {
 
     @ResponseBody
     @GetMapping("/member")
-    public BaseResponse<MemberDTO> getMember(Authentication authentication){
-        MemberDTO findMember = memberService.getMemberByUserName(authentication);
-        return new BaseResponse<>(findMember, BaseResponseCode.SUCCESS);
+    public BaseResponse<MemberDTO> getMember(){
+        Member findMember = memberService.getMemberByUserName();
+
+        return new BaseResponse<>(new MemberDTO(findMember), BaseResponseCode.SUCCESS);
     }
     @ResponseBody
     @GetMapping("/member/{id}")
