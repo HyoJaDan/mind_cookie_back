@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -22,12 +23,14 @@ public class StateService {
     private final StateRepository stateRepository;
     private final MemberRepository memberRepository;
     private final MemberService memberService;
-    public State findTodayState(Authentication authentication) {
-        Long id = memberService.getMemberId(authentication);
+    public State findTodayState(Long id) {
         LocalDate today = LocalDate.now();
 
-        return stateRepository.findByDate(id, today)
-                .orElseThrow(StateNotFoundException::new);
+        Optional<State> state = stateRepository.findByDate(id,today);
+        if(state.isPresent()){
+            return state.get();
+        }
+        return new State(LocalDate.now(), (byte) 0,(byte) 0,(byte) 0,(byte) 0);
     }
 
     @Transactional
