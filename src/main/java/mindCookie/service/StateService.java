@@ -23,25 +23,18 @@ public class StateService {
     private final StateRepository stateRepository;
     private final MemberRepository memberRepository;
     private final MemberService memberService;
-    public State findTodayState(Long id) {
-        LocalDate today = LocalDate.now();
 
-        Optional<State> state = stateRepository.findByDate(id,today);
+    public State findState(Long id, LocalDate date) {
+        Optional<State> state = stateRepository.findByDate(id, date);
         if(state.isPresent()){
             return state.get();
         }
-        return new State(LocalDate.now(), (byte) 0,(byte) 0,(byte) 0,(byte) 0);
+        return new State(LocalDate.now(), (byte) 50,(byte) 50,(byte) 50,(byte) 50);
     }
 
     @Transactional
-    public void updateOrCreateState(Authentication authentication, StateDTO getStateDTO) {
-        Long id = memberService.getMemberId(authentication);
-        LocalDate today = LocalDate.now();
-
-        Member member = memberRepository.findById(id)
-                .orElseThrow(MemberNotFoundException::new);
-
-        Optional<State> optionalState = stateRepository.findByDate(id, today);
+    public void updateOrCreateState(Member member, StateDTO getStateDTO, LocalDate date) {
+        Optional<State> optionalState = stateRepository.findByDate(member.getId(), date);
 
         State state;
         if (optionalState.isPresent()) {
@@ -51,7 +44,7 @@ public class StateService {
             state.setLifeSatisfaction(getStateDTO.getLifeSatisfaction());
             state.setPhysicalConnection(getStateDTO.getPhysicalCondition());
         } else {
-            state = new State(today, getStateDTO.getPositive(), getStateDTO.getNegative(),
+            state = new State(date, getStateDTO.getPositive(), getStateDTO.getNegative(),
                     getStateDTO.getLifeSatisfaction(), getStateDTO.getPhysicalCondition());
             member.addStates(state);
         }
