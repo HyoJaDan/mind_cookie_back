@@ -6,4 +6,5 @@ import lombok.Data;
 public class HobbitDTO {
     private String primaryHobbit;
     private String hobbit;
+    private String color;
 }

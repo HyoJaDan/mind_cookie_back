@@ -27,7 +27,7 @@ public class HobbitService {
      * 만약 primaryHobbit 이 있으면, 기존 primaryHobbit 에 goal 추가
      */
     @Transactional
-    public boolean addHobbit(Member member, String primaryHobbitName, String goalName) {
+    public PrimaryHobbitStatusDTO addHobbit(Member member, String primaryHobbitName, String goalName, String color) {
 
         // 상위 목표를 가져오거나 없으면 새로 추가
         Optional<PrimaryHobbit> primaryHobbitOptional = primaryHobbitRepository.findByNameAndMemberId(primaryHobbitName, member.getId());
@@ -39,6 +39,7 @@ public class HobbitService {
             primaryHobbit = new PrimaryHobbit();
             primaryHobbit.addPrimaryGoal(primaryHobbitName);
             primaryHobbit.setMember(member);
+            primaryHobbit.addColor(color);
             primaryHobbitRepository.save(primaryHobbit);
         }
 
@@ -46,8 +47,19 @@ public class HobbitService {
         Hobbit hobbitList = new Hobbit();
         hobbitList.setPrimaryHobbit(primaryHobbit);
         hobbitList.addGoalName(goalName);
+        hobbitListRepository.save(hobbitList);
 
-        return hobbitListRepository.save(hobbitList);
+        // PrimaryHobbitStatusDTO로 반환
+        PrimaryHobbitStatusDTO primaryHobbitStatusDTO = new PrimaryHobbitStatusDTO(
+                primaryHobbit.getId(), primaryHobbit.getPrimaryGoal(), primaryHobbit.getColor()
+        );
+
+        HobbitStatusDTO hobbitStatusDTO = new HobbitStatusDTO(
+                hobbitList.getId(), hobbitList.getGoalName(), false
+        );
+        primaryHobbitStatusDTO.addHobbitStatus(hobbitStatusDTO);
+
+        return primaryHobbitStatusDTO;
     }
 
     /**
@@ -56,7 +68,7 @@ public class HobbitService {
      * 있으면 PrimaryHobbit 을 멤버 아이디로 찾고, HobbitList 를 fetch join 으로, 해당 데이터를
      * DTO 형식으로 만다.
      */
-    public List<PrimaryHobbitStatusDTO> getTodayHobbitStatus(Member member) {
+    public List<PrimaryHobbitStatusDTO> getTodayHobbitStatus(Member member, LocalDate date) {
         Optional<List<PrimaryHobbit>> primaryHobbits = primaryHobbitRepository.findByMemberId(member.getId());
         List<PrimaryHobbitStatusDTO> primaryHobbitStatusDTOs = new ArrayList<>();
 
@@ -64,10 +76,10 @@ public class HobbitService {
 
         for (PrimaryHobbit primaryHobbit : primaryHobbits.get()) {
             PrimaryHobbitStatusDTO primaryHobbitStatusDTO = new PrimaryHobbitStatusDTO(
-                    primaryHobbit.getId(), primaryHobbit.getPrimaryGoal());
+                    primaryHobbit.getId(), primaryHobbit.getPrimaryGoal(), primaryHobbit.getColor());
 
             for (Hobbit hobbit : primaryHobbit.getHobbitList()) {
-                boolean isDone = dailyHobbitStatusRepository.existsByHobbitListAndDate(hobbit, LocalDate.now());
+                boolean isDone = dailyHobbitStatusRepository.existsByHobbitListAndDate(hobbit, date);
                 HobbitStatusDTO hobbitStatusDTO = new HobbitStatusDTO(
                         hobbit.getId(), hobbit.getGoalName(), isDone);
 
@@ -81,7 +93,7 @@ public class HobbitService {
     }
 
     @Transactional
-    public boolean updateTodayHobbitStatus(Long memberId, Long primaryHobbitId, Long hobbitListId) {
+    public boolean updateTodayHobbitStatus(Long memberId, Long primaryHobbitId, Long hobbitListId, LocalDate date) {
         // MemberId를 사용하여 HobbitList 엔티티를 가져오기
         Hobbit hobbitList = hobbitListRepository.findByMemberIdAndPrimaryHobbitIdAndHobbitListId(memberId, primaryHobbitId, hobbitListId);
 
@@ -91,7 +103,7 @@ public class HobbitService {
         }
 
         // 오늘 날짜의 DailyHobbitStatus가 존재하는지 확인
-        DailyHobbitStatus existingStatus = dailyHobbitStatusRepository.findByHobbitListAndDate(hobbitList, LocalDate.now());
+        DailyHobbitStatus existingStatus = dailyHobbitStatusRepository.findByHobbitListAndDate(hobbitList, date);
 
         if (existingStatus != null) {
             // 존재하면 삭제하고 isDone = false 반환
@@ -100,7 +112,7 @@ public class HobbitService {
         } else {
             // 존재하지 않으면 새로운 DailyHobbitStatus 생성 후 저장, isDone = true 반환
             DailyHobbitStatus newStatus = new DailyHobbitStatus();
-            newStatus.setDate(LocalDate.now());
+            newStatus.setDate(date);
             newStatus.setHobbitList(hobbitList);
             dailyHobbitStatusRepository.save(newStatus);
             return true;

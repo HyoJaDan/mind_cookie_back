@@ -15,6 +15,7 @@ public class PrimaryHobbit {
     @GeneratedValue
     private Long id;
     private String primaryGoal;
+    private String color;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_PRIMARY_HOBBIT_ID")
@@ -34,5 +35,8 @@ public class PrimaryHobbit {
 
     public void addPrimaryGoal(String primaryHobbitName) {
         this.primaryGoal=primaryHobbitName;
+    }
+    public void addColor(String color) {
+        this.color = color;
     }
 }

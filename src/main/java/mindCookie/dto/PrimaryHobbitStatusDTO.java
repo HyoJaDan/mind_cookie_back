@@ -9,11 +9,13 @@ import java.util.List;
 public class PrimaryHobbitStatusDTO {
     private Long primaryHobbitId;
     private String primaryHobbit;
+    private String color;
     private List<HobbitStatusDTO> hobbitStatuses;
 
-    public PrimaryHobbitStatusDTO(Long primaryHobbitId, String primaryHobbit) {
+    public PrimaryHobbitStatusDTO(Long primaryHobbitId, String primaryHobbit, String color) {
         this.primaryHobbitId = primaryHobbitId;
         this.primaryHobbit = primaryHobbit;
+        this.color = color;
         this.hobbitStatuses = new ArrayList<>();
     }
 
