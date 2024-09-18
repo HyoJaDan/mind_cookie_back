@@ -19,11 +19,9 @@ import java.util.stream.Collectors;
 public class EventService {
     private final EventRepository eventRepository;
     private final MemberService memberService;
-    public List<EventDTO> getEventListByDate(Authentication authentication) {
-        Long id = memberService.getMemberId(authentication);
+    public List<EventDTO> getEventListByDate(Long id, LocalDate date) {
 
-        LocalDate today = LocalDate.now();
-        Optional<List<Event>> findEvent = eventRepository.findEventsByMemberAndDate(id, today);
+        Optional<List<Event>> findEvent = eventRepository.findEventsByMemberAndDate(id, date);
 
         return findEvent
                 .map(events -> events.stream()
@@ -40,16 +38,12 @@ public class EventService {
     }
 
     @Transactional
-    public void addEvent(Authentication authentication, EventDTO eventDTO) {
-        Long memberId = memberService.getMemberId(authentication);
-
-        Member findMember = memberService.getMemberById(memberId);
-
+    public void addEvent(Member findMember, EventDTO eventDTO) {
         addIfAbsent(findMember.getEvent_participants(),eventDTO.getParticipants());
         addIfAbsent(findMember.getEvent_activities(), eventDTO.getWhichActivity());
         addIfAbsent(findMember.getEvent_emotions(), eventDTO.getEmotion());
 
-        Event event = new Event(eventDTO.getDate(),eventDTO.getParticipants(),eventDTO.getWhichActivity(),eventDTO.getEmotion(),eventDTO.getEmotionRate());
+        Event event = new Event(eventDTO.getDate(), eventDTO.getParticipants(), eventDTO.getWhichActivity(), eventDTO.getEmotion(), eventDTO.getEmotionRate());
         findMember.addEvents(event);
     }
 

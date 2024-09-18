@@ -3,6 +3,7 @@ package mindCookie.service;
 import lombok.RequiredArgsConstructor;
 import mindCookie.domain.Member;
 import mindCookie.domain.State;
+import mindCookie.dto.AllStateDTO;
 import mindCookie.dto.StateDTO;
 import mindCookie.exception.MemberNotFoundException;
 import mindCookie.exception.StateNotFoundException;
@@ -14,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +51,21 @@ public class StateService {
                     getStateDTO.getLifeSatisfaction(), getStateDTO.getPhysicalCondition());
             member.addStates(state);
         }
+    }
+    // 사용자의 모든 State 정보를 가져오는 서비스
+
+    public List<AllStateDTO> getAllStates(Long memberId) {
+        List<State> states = stateRepository.findAllStatesByMemberId(memberId);
+
+        // State -> StateDTO 변환
+        return states.stream()
+                .map(state -> new AllStateDTO(
+                        state.getDate(),
+                        state.getPositive(),
+                        state.getNegative(),
+                        state.getLifeSatisfaction(),
+                        state.getPhysicalConnection()
+                ))
+                .collect(Collectors.toList());
     }
 }

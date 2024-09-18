@@ -1,6 +1,7 @@
 package mindCookie.controller;
 
 import lombok.RequiredArgsConstructor;
+import mindCookie.domain.Member;
 import mindCookie.dto.EventDTO;
 import mindCookie.dto.EventInfoDTO;
 import mindCookie.global.response.BaseResponse;
@@ -10,6 +11,7 @@ import mindCookie.service.MemberService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -43,8 +45,11 @@ public class EventController {
      */
     @ResponseBody
     @GetMapping("/event-list")
-    public BaseResponse<List<EventDTO>> getEventList(Authentication authentication){
-         return new BaseResponse<>(eventService.getEventListByDate(authentication),BaseResponseCode.SUCCESS);
+    public BaseResponse<List<EventDTO>> getEventList(@RequestParam LocalDate date){
+        Member findMember = memberService.getMemberByUserName();
+
+        List<EventDTO> returnValue= eventService.getEventListByDate(findMember.getId(), date);
+        return new BaseResponse<>(returnValue, BaseResponseCode.SUCCESS);
     }
     /**
      * - `PUT` : 금일 event List를 추가하는 API : `/api/member/{id}/event`
@@ -58,8 +63,10 @@ public class EventController {
      */
     @ResponseBody
     @PutMapping("/event")
-    public BaseResponse<Void> PutEvent(Authentication authentication, @RequestBody EventDTO eventDTO){
-        eventService.addEvent(authentication, eventDTO);
+    public BaseResponse<Void> PutEvent(@RequestBody EventDTO eventDTO){
+        Member findMember = memberService.getMemberByUserName();
+
+        eventService.addEvent(findMember, eventDTO);
         return new BaseResponse<>(BaseResponseCode.SUCCESS_PUT_EVENT);
     }
 }
