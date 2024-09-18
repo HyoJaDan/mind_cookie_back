@@ -3,6 +3,8 @@ package mindCookie.service;
 import lombok.RequiredArgsConstructor;
 import mindCookie.domain.Member;
 import mindCookie.domain.Stopwatch;
+import mindCookie.dto.AllStopwatchDTO;
+import mindCookie.dto.DateTimeDTO;
 import mindCookie.dto.StopwatchDTO;
 import mindCookie.repository.StopwatchRepository;
 import org.springframework.stereotype.Service;
@@ -10,9 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +20,31 @@ import java.util.Optional;
 public class StopwatchService {
     private final StopwatchRepository stopwatchRepository;
 
+
+    public List<AllStopwatchDTO> findAllStopwatchList(Member member) {
+        List<Stopwatch> allStopwatches = stopwatchRepository.findAllByMember(member.getId());
+        Map<String, List<DateTimeDTO>> groupedStopwatches = new HashMap<>();
+
+        // 스탑워치 데이터를 target을 기준으로 그룹화
+        for (Stopwatch stopwatch : allStopwatches) {
+            String target = stopwatch.getTarget();
+            LocalDate date = stopwatch.getDate();
+            LocalTime time = stopwatch.getTime();
+
+            // 해당 target이 이미 맵에 존재하는지 확인
+            groupedStopwatches
+                    .computeIfAbsent(target, k -> new ArrayList<>())
+                    .add(new DateTimeDTO(date, time));  // target에 해당하는 date, time 추가
+        }
+
+        // 최종적으로 DTO 리스트로 변환
+        List<AllStopwatchDTO> returnValue = new ArrayList<>();
+        for (Map.Entry<String, List<DateTimeDTO>> entry : groupedStopwatches.entrySet()) {
+            returnValue.add(new AllStopwatchDTO(entry.getKey(), entry.getValue()));
+        }
+
+        return returnValue;
+    }
     public List<StopwatchDTO> findTodayStopwatchList(Member member) {
         LocalDate today = LocalDate.now();
         Optional<List<Stopwatch>> todayStopwatchList = stopwatchRepository.findByDate(member.getId(), today);
@@ -84,5 +109,10 @@ public class StopwatchService {
     @Transactional
     public void removeStopwatchTarget(Member member, String targetToRemove) {
         member.removeStopwatch_target(targetToRemove);
+
+        List<Stopwatch> stopwatchesToRemove = stopwatchRepository.findAllByMemberAndTarget(member.getId(), targetToRemove);
+        for (Stopwatch stopwatch : stopwatchesToRemove) {
+            stopwatchRepository.delete(stopwatch); // 삭제
+        }
     }
 }

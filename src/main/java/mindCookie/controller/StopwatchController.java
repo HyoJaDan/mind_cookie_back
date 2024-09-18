@@ -2,6 +2,7 @@ package mindCookie.controller;
 
 import lombok.RequiredArgsConstructor;
 import mindCookie.domain.Member;
+import mindCookie.dto.AllStopwatchDTO;
 import mindCookie.dto.StateDTO;
 import mindCookie.dto.StopwatchDTO;
 import mindCookie.global.response.BaseResponse;
@@ -19,6 +20,19 @@ public class StopwatchController {
     private final MemberService memberService;
     private final StopwatchService stopwatchService;
 
+    /**
+     * 모든 날짜의 스탑워치 목록 가져오는 API
+     * get : /stopwatch/all
+     * @return
+     */
+    @ResponseBody
+    @GetMapping("/stopwatch/all")
+    public BaseResponse<List<AllStopwatchDTO>> getAllStopwatchData() {
+        Member findMember = memberService.getMemberByUserName();
+
+        List<AllStopwatchDTO> allStopwatches = stopwatchService.findAllStopwatchList(findMember);
+        return new BaseResponse<>(allStopwatches, BaseResponseCode.SUCCESS);
+    }
     /**
      * 오늘 스탑워치 가져오는 API
      * get : /member/{id}/stopwatch/today
