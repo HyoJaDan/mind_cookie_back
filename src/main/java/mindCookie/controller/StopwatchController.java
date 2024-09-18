@@ -1,10 +1,12 @@
 package mindCookie.controller;
 
 import lombok.RequiredArgsConstructor;
+import mindCookie.domain.Member;
 import mindCookie.dto.StateDTO;
 import mindCookie.dto.StopwatchDTO;
 import mindCookie.global.response.BaseResponse;
 import mindCookie.global.response.BaseResponseCode;
+import mindCookie.service.MemberService;
 import mindCookie.service.StopwatchService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class StopwatchController {
+    private final MemberService memberService;
     private final StopwatchService stopwatchService;
 
     /**
@@ -24,8 +27,10 @@ public class StopwatchController {
      */
     @ResponseBody
     @GetMapping("/stopwatch/today")
-    public BaseResponse<List<StopwatchDTO>> getStopwatch(Authentication authentication){
-        List<StopwatchDTO> stopwatches = stopwatchService.findTodayStopwatchList(authentication);
+    public BaseResponse<List<StopwatchDTO>> getStopwatch(){
+        Member findMember = memberService.getMemberByUserName();
+
+        List<StopwatchDTO> stopwatches = stopwatchService.findTodayStopwatchList(findMember);
         return new BaseResponse<>(stopwatches, BaseResponseCode.SUCCESS);
     }
 
@@ -36,8 +41,10 @@ public class StopwatchController {
      */
     @ResponseBody
     @PutMapping("/stopwatch/update-time")
-    public BaseResponse<StateDTO> stopStopwatch(Authentication authentication, @RequestBody StopwatchDTO stopwatchDTO){
-        stopwatchService.updateStopwatchTime(authentication, stopwatchDTO.getTarget(),stopwatchDTO.getTime());
+    public BaseResponse<StateDTO> stopStopwatch(@RequestBody StopwatchDTO stopwatchDTO){
+        Member findMember = memberService.getMemberByUserName();
+
+        stopwatchService.updateStopwatchTime(findMember, stopwatchDTO.getTarget(),stopwatchDTO.getTime());
         return new BaseResponse<>(BaseResponseCode.SUCCESS_STOPWATCH_UPDATE);
     }
     /**
@@ -49,10 +56,10 @@ public class StopwatchController {
      */
     @ResponseBody
     @PutMapping("/add-stopwatch-target")
-    public BaseResponse<StateDTO> putStopwatchTarget(
-            Authentication authentication,
-            @RequestParam String add) {
-        stopwatchService.addStopwatchTarget(authentication,add);
+    public BaseResponse<StateDTO> putStopwatchTarget(@RequestParam String add) {
+        Member findMember = memberService.getMemberByUserName();
+
+        stopwatchService.addStopwatchTarget(findMember, add);
         return new BaseResponse<>(BaseResponseCode.SUCCESS_STOPWATCH_UPDATE);
     }
     /**
@@ -64,10 +71,10 @@ public class StopwatchController {
      */
     @ResponseBody
     @PutMapping("/remove-stopwatch-target")
-    public BaseResponse<StateDTO> removeStopwatchTarget(
-            Authentication authentication,
-            @RequestParam String targetToRemove) {
-        stopwatchService.removeStopwatchTarget(authentication, targetToRemove);
+    public BaseResponse<StateDTO> removeStopwatchTarget(@RequestParam String targetToRemove) {
+        Member findMember = memberService.getMemberByUserName();
+
+        stopwatchService.removeStopwatchTarget(findMember, targetToRemove);
         return new BaseResponse<>(BaseResponseCode.SUCCESS_STOPWATCH_UPDATE);
     }
 }
