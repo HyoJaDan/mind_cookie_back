@@ -29,6 +29,7 @@ public class Hobbit {
         this.goalName = goalName;
         addPrimaryHobbit(primaryHobbit);
     }
+    public Hobbit(){}
     private void addPrimaryHobbit(PrimaryHobbit primaryHobbit){
         this.primaryHobbit = primaryHobbit;
         if(primaryHobbit != null)

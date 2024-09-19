@@ -30,6 +30,7 @@ public class PrimaryHobbit {
         this.color = color;
         addMember(member);
     }
+    public PrimaryHobbit(){}
     private void addMember(Member member){
         this.member = member;
         if(member != null){

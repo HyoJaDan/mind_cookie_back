@@ -25,6 +25,7 @@ public class DailyHobbitStatus {
         this.date = date;
         addHobbitList(hobbit);
     }
+    public DailyHobbitStatus(){}
     private void addHobbitList(Hobbit hobbit){
         this.hobbit=hobbit;
         if(hobbit != null)
