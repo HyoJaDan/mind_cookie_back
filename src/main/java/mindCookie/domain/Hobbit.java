@@ -25,15 +25,14 @@ public class Hobbit {
     @OneToMany(mappedBy = "hobbit", cascade = CascadeType.ALL)
     private List<DailyHobbitStatus> dailyHobbitStatus = new ArrayList<>();
 
-    public void setPrimaryHobbit(PrimaryHobbit primaryHobbit) {
-        this.primaryHobbit=primaryHobbit;
+    public Hobbit(String goalName, PrimaryHobbit primaryHobbit) {
+        this.goalName = goalName;
+        addPrimaryHobbit(primaryHobbit);
     }
-    public void addDailyHobbitStatus(DailyHobbitStatus status) {
-        dailyHobbitStatus.add(status);
-        status.setHobbitList(this);
+    private void addPrimaryHobbit(PrimaryHobbit primaryHobbit){
+        this.primaryHobbit = primaryHobbit;
+        if(primaryHobbit != null)
+            primaryHobbit.addHobbitList(this);
     }
 
-    public void addGoalName(String goalName) {
-        this.goalName=goalName;
-    }
 }

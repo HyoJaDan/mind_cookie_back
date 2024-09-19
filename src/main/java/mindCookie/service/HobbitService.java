@@ -41,9 +41,7 @@ public class HobbitService {
         }
 
         // 새 목표 추가
-        Hobbit hobbitList = new Hobbit();
-        hobbitList.setPrimaryHobbit(primaryHobbit);
-        hobbitList.addGoalName(goalName);
+        Hobbit hobbitList = new Hobbit(goalName, primaryHobbit);
         hobbitListRepository.save(hobbitList);
 
         // PrimaryHobbitStatusDTO로 반환

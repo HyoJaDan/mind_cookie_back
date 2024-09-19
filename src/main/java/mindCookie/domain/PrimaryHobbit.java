@@ -30,7 +30,7 @@ public class PrimaryHobbit {
         this.color = color;
         addMember(member);
     }
-    public void addMember(Member member){
+    private void addMember(Member member){
         this.member = member;
         if(member != null){
             member.addPrimaryHobbit(this);
@@ -38,15 +38,5 @@ public class PrimaryHobbit {
     }
     public void addHobbitList(Hobbit hobbit) {
         hobbitList.add(hobbit);
-        hobbit.setPrimaryHobbit(this);
     }
-
-    public void addPrimaryGoal(String primaryHobbitName) {
-        this.primaryGoal=primaryHobbitName;
-    }
-    public void addColor(String color) {
-        this.color = color;
-    }
-
-
 }
