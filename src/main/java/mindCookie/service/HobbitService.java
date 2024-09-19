@@ -36,10 +36,7 @@ public class HobbitService {
         if (primaryHobbitOptional.isPresent()) {
             primaryHobbit = primaryHobbitOptional.get();
         } else {
-            primaryHobbit = new PrimaryHobbit();
-            primaryHobbit.addPrimaryGoal(primaryHobbitName);
-            primaryHobbit.setMember(member);
-            primaryHobbit.addColor(color);
+            primaryHobbit = new PrimaryHobbit(primaryHobbitName, color, member);
             primaryHobbitRepository.save(primaryHobbit);
         }
 

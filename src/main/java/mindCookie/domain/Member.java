@@ -58,7 +58,6 @@ public class Member {
     private List<PrimaryHobbit> primaryHobbits = new ArrayList<>();
     public void addPrimaryHobbit(PrimaryHobbit primaryHobbit){
         primaryHobbits.add(primaryHobbit);
-        primaryHobbit.setMember(this);
     }
 
     public Member(){

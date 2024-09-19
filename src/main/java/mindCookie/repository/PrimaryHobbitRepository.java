@@ -22,7 +22,9 @@ public class PrimaryHobbitRepository {
 
     public Optional<PrimaryHobbit> findByNameAndMemberId(String primaryHobbitName, Long memberId) {
         TypedQuery<PrimaryHobbit> query = em.createQuery(
-                "SELECT ph FROM PrimaryHobbit ph WHERE ph.primaryGoal = :primaryHobbitName AND ph.member.id = :memberId",
+                "SELECT ph FROM PrimaryHobbit ph"+
+                        " WHERE ph.primaryGoal = :primaryHobbitName"+
+                        " AND ph.member.id = :memberId",
                 PrimaryHobbit.class);
         query.setParameter("primaryHobbitName", primaryHobbitName);
         query.setParameter("memberId", memberId);
@@ -32,7 +34,8 @@ public class PrimaryHobbitRepository {
         List<PrimaryHobbit> result = em.createQuery(
                         "SELECT ph FROM PrimaryHobbit ph" +
                                 " JOIN FETCH ph.hobbitList hl" +  // Fetch join을 사용하여 hobbitLists도 함께 로드
-                                " WHERE ph.member.id = :memberId", PrimaryHobbit.class)
+                                " WHERE ph.member.id = :memberId"
+                        , PrimaryHobbit.class)
                 .setParameter("memberId", memberId)
                 .getResultList();
 

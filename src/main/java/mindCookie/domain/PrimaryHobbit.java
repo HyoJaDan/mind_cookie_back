@@ -24,10 +24,18 @@ public class PrimaryHobbit {
 
     @OneToMany(mappedBy = "primaryHobbit", cascade = CascadeType.ALL)
     private List<Hobbit> hobbitList = new ArrayList<>();
-    public void setMember(Member member) {
-        this.member=member;
-    }
 
+    public PrimaryHobbit(String primaryGoal, String color, Member member) {
+        this.primaryGoal = primaryGoal;
+        this.color = color;
+        addMember(member);
+    }
+    public void addMember(Member member){
+        this.member = member;
+        if(member != null){
+            member.addPrimaryHobbit(this);
+        }
+    }
     public void addHobbitList(Hobbit hobbit) {
         hobbitList.add(hobbit);
         hobbit.setPrimaryHobbit(this);
@@ -39,4 +47,6 @@ public class PrimaryHobbit {
     public void addColor(String color) {
         this.color = color;
     }
+
+
 }
