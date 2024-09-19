@@ -35,4 +35,7 @@ public class Hobbit {
             primaryHobbit.addHobbitList(this);
     }
 
+    public void addDailyHobbitStatus(DailyHobbitStatus dailyHobbitStatus){
+        this.dailyHobbitStatus.add(dailyHobbitStatus);
+    }
 }

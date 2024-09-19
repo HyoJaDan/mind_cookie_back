@@ -106,9 +106,7 @@ public class HobbitService {
             return false;
         } else {
             // 존재하지 않으면 새로운 DailyHobbitStatus 생성 후 저장, isDone = true 반환
-            DailyHobbitStatus newStatus = new DailyHobbitStatus();
-            newStatus.setDate(date);
-            newStatus.setHobbitList(hobbitList);
+            DailyHobbitStatus newStatus = new DailyHobbitStatus(date, hobbitList);
             dailyHobbitStatusRepository.save(newStatus);
             return true;
         }

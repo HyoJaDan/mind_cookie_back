@@ -21,11 +21,13 @@ public class DailyHobbitStatus {
     @JoinColumn(name="DAILY_HOBBIT_HOBBIT_ID")
     private Hobbit hobbit;
 
-    public void setHobbitList(Hobbit hobbit) {
-        this.hobbit = hobbit;
+    public DailyHobbitStatus(LocalDate date, Hobbit hobbit) {
+        this.date = date;
+        addHobbitList(hobbit);
     }
-
-    public void setDate(LocalDate now) {
-        this.date=now;
+    private void addHobbitList(Hobbit hobbit){
+        this.hobbit=hobbit;
+        if(hobbit != null)
+            hobbit.addDailyHobbitStatus(this);
     }
 }
