@@ -2,8 +2,10 @@ package mindCookie.controller;
 
 import lombok.RequiredArgsConstructor;
 import mindCookie.domain.*;
+import mindCookie.dto.Hobbit.GetDTO.HobbitCombinedDTO;
+import mindCookie.dto.Hobbit.ToDoDTO;
 import mindCookie.dto.HobbitDTO;
-import mindCookie.dto.PrimaryHobbitStatusDTO;
+import mindCookie.dto.Hobbit.PrimaryHobbitStatusDTO;
 import mindCookie.global.response.BaseResponse;
 import mindCookie.global.response.BaseResponseCode;
 import mindCookie.service.HobbitService;
@@ -31,7 +33,7 @@ public class HobbitController {
             return new BaseResponse<>(BaseResponseCode.FAIL);
     }
 
-    //해당 날짜 모든 todo-list를 가져오기
+    // v1 - 해당 날짜 모든 todo-list를 가져오기
     @ResponseBody
     @GetMapping("/today-status")
     public BaseResponse<List<PrimaryHobbitStatusDTO>> getTodayHobbitStatus(@RequestParam LocalDate date) {
@@ -39,6 +41,23 @@ public class HobbitController {
         List<PrimaryHobbitStatusDTO> hobbitStatusList = hobbitService.getTodayHobbitStatus(findMember, date);
 
         return new BaseResponse<>(hobbitStatusList, BaseResponseCode.SUCCESS);
+    }
+    // v-2 금일 포함 7일간의 목표 상태 가져오기
+    @ResponseBody
+    @GetMapping("/week-status")
+    public BaseResponse<List<ToDoDTO>> getHobbitStatusForNext7Days() {
+        Member findMember = memberService.getMemberByUserName();
+        List<ToDoDTO> hobbitStatusByDateList = hobbitService.getHobbitStatusForNext7Days(findMember);
+
+        return new BaseResponse<>(hobbitStatusByDateList, BaseResponseCode.SUCCESS);
+    }
+    // v-3 기본 목표 정보와 날짜별 완료 상태를 함께 가져오기
+    @GetMapping("/hobbit-status")
+    public BaseResponse<HobbitCombinedDTO> getHobbitStatus() {
+        Member findMember = memberService.getMemberByUserName();
+        HobbitCombinedDTO hobbitCombinedDTO = hobbitService.getHobbitCombinedData(findMember);
+
+        return new BaseResponse<>(hobbitCombinedDTO, BaseResponseCode.SUCCESS);
     }
     @ResponseBody
     @PutMapping("/update-status/{primaryHobbitId}/{hobbitListId}")
@@ -48,5 +67,4 @@ public class HobbitController {
 
         return new BaseResponse<>(isDone, BaseResponseCode.SUCCESS);
     }
-
 }

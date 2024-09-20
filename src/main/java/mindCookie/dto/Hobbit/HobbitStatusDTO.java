@@ -1,4 +1,4 @@
-package mindCookie.dto;
+package mindCookie.dto.Hobbit;
 
 import lombok.Data;
 

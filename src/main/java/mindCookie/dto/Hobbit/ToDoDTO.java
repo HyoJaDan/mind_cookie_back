@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @AllArgsConstructor
-public class HobbitByDateDTO {
+public class ToDoDTO {
     private LocalDate date;
     private List<PrimaryHobbitStatusDTO> primaryHobbitStatusDTOs;
 }

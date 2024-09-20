@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class HobbitStatusDTO2 {
-    private Long hobbitId;
-    private boolean isDone;
+public class PrimaryHobbitSuccessDTO {
+    private String name;
+    private int numOfSucceed;
 }

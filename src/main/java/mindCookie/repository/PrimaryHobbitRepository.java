@@ -3,6 +3,7 @@ package mindCookie.repository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import mindCookie.domain.Member;
 import mindCookie.domain.PrimaryHobbit;
 import org.springframework.stereotype.Repository;
 
@@ -40,5 +41,13 @@ public class PrimaryHobbitRepository {
                 .getResultList();
 
         return result.isEmpty() ? Optional.empty() : Optional.of(result);
+    }
+    public List<PrimaryHobbit> findAllByMember(Member member) {
+        return em.createQuery(
+                        "SELECT ph FROM PrimaryHobbit ph" +
+                                " JOIN FETCH ph.hobbitList hl" +  // Fetch join을 사용하여 hobbitLists도 함께 로드
+                                " WHERE ph.member = :member", PrimaryHobbit.class)
+                .setParameter("member", member)
+                .getResultList();
     }
 }
