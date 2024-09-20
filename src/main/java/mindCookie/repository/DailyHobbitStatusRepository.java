@@ -8,6 +8,9 @@ import mindCookie.domain.Hobbit;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DailyHobbitStatusRepository {
@@ -35,6 +38,34 @@ public class DailyHobbitStatusRepository {
                 .getResultStream()
                 .findFirst()
                 .orElse(null);
+    }
+    public Map<LocalDate, Map<Long, Boolean>> getHobbitStatusMap(List<Hobbit> hobbitList, LocalDate startDate, LocalDate endDate) {
+        TypedQuery<Object[]> query = em.createQuery(
+                "SELECT dhs.date, dhs.hobbit.id, (COUNT(dhs) > 0) " +
+                        "FROM DailyHobbitStatus dhs " +
+                        "WHERE dhs.hobbit IN :hobbitList AND dhs.date BETWEEN :startDate AND :endDate " +
+                        "GROUP BY dhs.date, dhs.hobbit.id",
+                Object[].class);
+
+        query.setParameter("hobbitList", hobbitList);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+
+        List<Object[]> results = query.getResultList();
+
+        // 날짜별로 hobbit 상태를 저장하는 맵 구성
+        Map<LocalDate, Map<Long, Boolean>> statusMap = new HashMap<>();
+        for (Object[] result : results) {
+            LocalDate date = (LocalDate) result[0];
+            Long hobbitId = (Long) result[1];
+            Boolean isDone = (Boolean) result[2];
+
+            statusMap
+                    .computeIfAbsent(date, k -> new HashMap<>())
+                    .put(hobbitId, isDone);
+        }
+
+        return statusMap;
     }
 
     public void delete(DailyHobbitStatus dailyHobbitStatus) {
