@@ -17,14 +17,14 @@ public class MemberController {
     private final MemberService memberService;
 
     @ResponseBody
-    @GetMapping("/member")
+    @GetMapping("/api/member")
     public BaseResponse<MemberDTO> getMember(){
         Member findMember = memberService.getMemberByUserName();
 
         return new BaseResponse<>(new MemberDTO(findMember), BaseResponseCode.SUCCESS);
     }
     @ResponseBody
-    @GetMapping("/member/{id}")
+    @GetMapping("/api/member/{id}")
     public BaseResponse<Member> getMemberData(@PathVariable Long id){
         Member findMember = memberService.getMemberById(id);
 

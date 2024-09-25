@@ -26,7 +26,7 @@ public class StopwatchController {
      * @return
      */
     @ResponseBody
-    @GetMapping("/stopwatch/all")
+    @GetMapping("/api/stopwatch/all")
     public BaseResponse<List<AllStopwatchDTO>> getAllStopwatchData() {
         Member findMember = memberService.getMemberByUserName();
 
@@ -40,7 +40,7 @@ public class StopwatchController {
      * @return
      */
     @ResponseBody
-    @GetMapping("/stopwatch/today")
+    @GetMapping("/api/stopwatch/today")
     public BaseResponse<List<StopwatchDTO>> getStopwatch(){
         Member findMember = memberService.getMemberByUserName();
 
@@ -54,7 +54,7 @@ public class StopwatchController {
      * @return
      */
     @ResponseBody
-    @PutMapping("/stopwatch/update-time")
+    @PutMapping("/api/stopwatch/update-time")
     public BaseResponse<StateDTO> stopStopwatch(@RequestBody StopwatchDTO stopwatchDTO){
         Member findMember = memberService.getMemberByUserName();
 
@@ -69,7 +69,7 @@ public class StopwatchController {
      * @return
      */
     @ResponseBody
-    @PutMapping("/add-stopwatch-target")
+    @PutMapping("/api/add-stopwatch-target")
     public BaseResponse<StateDTO> putStopwatchTarget(@RequestParam String add) {
         Member findMember = memberService.getMemberByUserName();
 
@@ -84,7 +84,7 @@ public class StopwatchController {
      * @return
      */
     @ResponseBody
-    @PutMapping("/remove-stopwatch-target")
+    @PutMapping("/api/remove-stopwatch-target")
     public BaseResponse<StateDTO> removeStopwatchTarget(@RequestParam String targetToRemove) {
         Member findMember = memberService.getMemberByUserName();
 

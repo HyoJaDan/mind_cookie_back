@@ -7,5 +7,5 @@ import lombok.Getter;
 @AllArgsConstructor
 public class HobbitDTO {
     private Long hobbitId;
-    private String goalName;
+    private String hobbit;
 }

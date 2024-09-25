@@ -21,7 +21,7 @@ public class StateController {
     private final MemberService memberService;
     private final StateService stateService;
     @ResponseBody
-    @GetMapping("/myState")
+    @GetMapping("/api/myState")
     public BaseResponse<StateDTO> getStateRequest(@RequestParam LocalDate date){
         Member findMember = memberService.getMemberByUserName();
 
@@ -30,7 +30,7 @@ public class StateController {
         return new BaseResponse<>(returnValue, BaseResponseCode.SUCCESS);
     }
     @ResponseBody
-    @PutMapping("/myState")
+    @PutMapping("/api/myState")
     public BaseResponse<Void> putStateRequest(@RequestBody StateDTO stateDTO, @RequestParam LocalDate date){
         Member findMember = memberService.getMemberByUserName();
 
@@ -46,7 +46,7 @@ public class StateController {
      *         - 데이터가 없습니다.
      *         - 기타 오류
      */
-    @GetMapping("/all-state")
+    @GetMapping("/api/all-state")
     public BaseResponse<List<AllStateDTO>> getAllStates() {
         Long memberId = memberService.getMemberByUserName().getId();
 

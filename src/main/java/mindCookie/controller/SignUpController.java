@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 class SignUpController {
-
     private final SignUpService signUpService;
 
     @PostMapping("/join")

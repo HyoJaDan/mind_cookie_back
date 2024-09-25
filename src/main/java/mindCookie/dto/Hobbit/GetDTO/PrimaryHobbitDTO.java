@@ -11,16 +11,16 @@ import java.util.List;
 @AllArgsConstructor
 public class PrimaryHobbitDTO {
     private Long primaryHobbitId;
-    private String primaryGoal;
+    private String primaryHobbit;
     private String color;
-    private List<HobbitDTO> hobbits = new ArrayList<>();
+    private List<HobbitDTO> hobbitStatuses = new ArrayList<>();
 
     public void addHobbit(HobbitDTO hobbit) {
-        hobbits.add(hobbit);
+        hobbitStatuses.add(hobbit);
     }
-    public PrimaryHobbitDTO(Long primaryHobbitId, String primaryGoal, String color) {
+    public PrimaryHobbitDTO(Long primaryHobbitId, String primaryHobbit, String color) {
         this.primaryHobbitId = primaryHobbitId;
-        this.primaryGoal = primaryGoal;
+        this.primaryHobbit = primaryHobbit;
         this.color = color;
     }
 }

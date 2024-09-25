@@ -148,7 +148,7 @@ public class HobbitService {
 
         // 날짜별 완료 상태 가져오기
         LocalDate today = LocalDate.now();
-        LocalDate endDate = today.plusDays(6); // 7일간의 데이터 (오늘 포함)
+        LocalDate startDate = today.minusDays(6); // 7일간의 데이터 (오늘 포함)
 
         // 모든 PrimaryHobbit에 속한 Hobbit을 가져오기
         List<Hobbit> allHobbits = primaryHobbits.stream()
@@ -156,23 +156,21 @@ public class HobbitService {
                 .collect(Collectors.toList());
 
         // 모든 날짜와 hobbit의 완료 상태를 한 번에 가져오기 위한 Map 생성
-        Map<LocalDate, Map<Long, Boolean>> hobbitStatusMap = dailyHobbitStatusRepository.getHobbitStatusMap(allHobbits, today, endDate);
+        Map<LocalDate, Map<Long, Boolean>> hobbitStatusMap = dailyHobbitStatusRepository.getHobbitStatusMap(allHobbits, startDate, today);
 
-        // 날짜별 완료 상태 DTO 생성
         List<HobbitStatusByDateDTO> hobbitStatusByDateList = new ArrayList<>();
-        for (LocalDate date = today; !date.isAfter(endDate); date = date.plusDays(1)) {
-            List<HobbitStatusDTO2> hobbitStatusDTOs = new ArrayList<>();
+        for (LocalDate date = startDate; !date.isAfter(today); date = date.plusDays(1)) {
+            List<Boolean> hobbitStatusList = new ArrayList<>();
 
             for (PrimaryHobbit primaryHobbit : primaryHobbits) {
                 for (Hobbit hobbit : primaryHobbit.getHobbitList()) {
                     boolean isDone = hobbitStatusMap.getOrDefault(date, new HashMap<>())
                             .getOrDefault(hobbit.getId(), false);
-                    HobbitStatusDTO2 hobbitStatusDTO = new HobbitStatusDTO2(hobbit.getId(), isDone);
-                    hobbitStatusDTOs.add(hobbitStatusDTO);
+                    hobbitStatusList.add(isDone);  // boolean 값만 추가
                 }
             }
 
-            hobbitStatusByDateList.add(new HobbitStatusByDateDTO(date, hobbitStatusDTOs));
+            hobbitStatusByDateList.add(new HobbitStatusByDateDTO(date, hobbitStatusList));
         }
 
         // 상위 3개의 성공 횟수를 가진 목표 정렬

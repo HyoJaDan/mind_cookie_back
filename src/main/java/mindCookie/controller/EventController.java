@@ -30,7 +30,7 @@ public class EventController {
      *         - 기타 오류
      */
     @ResponseBody
-    @GetMapping("/event-info")
+    @GetMapping("/api/event-info")
     public BaseResponse<EventInfoDTO> getEventInfo(Authentication authentication){
         return new BaseResponse<>(memberService.getMemberEventInfo(authentication), BaseResponseCode.SUCCESS);
     }
@@ -44,7 +44,7 @@ public class EventController {
      *         - emotion_rate : byte
      */
     @ResponseBody
-    @GetMapping("/event-list")
+    @GetMapping("/api/event-list")
     public BaseResponse<List<EventDTO>> getEventList(@RequestParam LocalDate date){
         Member findMember = memberService.getMemberByUserName();
 
@@ -62,7 +62,7 @@ public class EventController {
      *         - emotion_rate : byte
      */
     @ResponseBody
-    @PutMapping("/event")
+    @PutMapping("/api/event")
     public BaseResponse<Void> PutEvent(@RequestBody EventDTO eventDTO){
         Member findMember = memberService.getMemberByUserName();
 

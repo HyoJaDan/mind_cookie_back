@@ -22,7 +22,7 @@ public class HobbitController {
     private final MemberService memberService;
     // 목표 추가
     @ResponseBody
-    @PostMapping("/add-hobbit")
+    @PostMapping("/api/add-hobbit")
     public BaseResponse<PrimaryHobbitStatusDTO> addHobbit(@RequestBody HobbitDTO hobbitDTO) {
         Member findMember = memberService.getMemberByUserName();
         PrimaryHobbitStatusDTO primaryHobbitStatusDTO = hobbitService.addHobbit(findMember, hobbitDTO.getPrimaryHobbit(), hobbitDTO.getHobbit(), hobbitDTO.getColor());
@@ -35,7 +35,7 @@ public class HobbitController {
 
     // v1 - 해당 날짜 모든 todo-list를 가져오기
     @ResponseBody
-    @GetMapping("/today-status")
+    @GetMapping("/api/today-status")
     public BaseResponse<List<PrimaryHobbitStatusDTO>> getTodayHobbitStatus(@RequestParam LocalDate date) {
         Member findMember = memberService.getMemberByUserName();
         List<PrimaryHobbitStatusDTO> hobbitStatusList = hobbitService.getTodayHobbitStatus(findMember, date);
@@ -44,7 +44,7 @@ public class HobbitController {
     }
     // v-2 금일 포함 7일간의 목표 상태 가져오기
     @ResponseBody
-    @GetMapping("/week-status")
+    @GetMapping("/api/week-status")
     public BaseResponse<List<ToDoDTO>> getHobbitStatusForNext7Days() {
         Member findMember = memberService.getMemberByUserName();
         List<ToDoDTO> hobbitStatusByDateList = hobbitService.getHobbitStatusForNext7Days(findMember);
@@ -52,7 +52,7 @@ public class HobbitController {
         return new BaseResponse<>(hobbitStatusByDateList, BaseResponseCode.SUCCESS);
     }
     // v-3 기본 목표 정보와 날짜별 완료 상태를 함께 가져오기
-    @GetMapping("/hobbit-status")
+    @GetMapping("/api/hobbit-status")
     public BaseResponse<HobbitCombinedDTO> getHobbitStatus() {
         Member findMember = memberService.getMemberByUserName();
         HobbitCombinedDTO hobbitCombinedDTO = hobbitService.getHobbitCombinedData(findMember);
@@ -60,7 +60,7 @@ public class HobbitController {
         return new BaseResponse<>(hobbitCombinedDTO, BaseResponseCode.SUCCESS);
     }
     @ResponseBody
-    @PutMapping("/update-status/{primaryHobbitId}/{hobbitListId}")
+    @PutMapping("/api/update-status/{primaryHobbitId}/{hobbitListId}")
     public BaseResponse<Boolean> updateTodayHobbitStatus(@PathVariable Long primaryHobbitId, @PathVariable Long hobbitListId,@RequestParam LocalDate date) {
         Member findMember = memberService.getMemberByUserName();
         boolean isDone = hobbitService.updateTodayHobbitStatus(findMember.getId(), primaryHobbitId, hobbitListId,date);

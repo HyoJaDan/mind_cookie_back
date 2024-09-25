@@ -11,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class HobbitStatusByDateDTO {
     private LocalDate date;
-    private List<HobbitStatusDTO2> hobbitStatus;
+    private List<Boolean> hobbitStatus;
 }
