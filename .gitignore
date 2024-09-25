@@ -38,5 +38,5 @@ out/
 .vscode/
 # 설정 파일
 *.yml
-resources/
+src/main/resources/
 test/
