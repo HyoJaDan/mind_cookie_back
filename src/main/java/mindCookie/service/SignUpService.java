@@ -21,14 +21,15 @@ public class SignUpService {
 
     @Transactional
     public boolean signUpProcess(SignUpDTO signUpDTO) {
-
         String username = signUpDTO.getUsername();
 
-        String encodedPassword = bCryptPasswordEncoder.encode(signUpDTO.getPassword());
+        // username으로 기존 회원이 있는지 확인
         boolean isUserExist = memberRepository.existsByUsername(username);
-        if (isUserExist){
-            return false;
+        if (isUserExist) {
+            return false; // 이미 존재하는 사용자이므로 회원가입 실패
         }
+
+        String encodedPassword = bCryptPasswordEncoder.encode(signUpDTO.getPassword());
 
         List<String> eventParticipants = new ArrayList<>();
         List<String> eventActivities = new ArrayList<>();
