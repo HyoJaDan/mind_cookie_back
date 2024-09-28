@@ -35,7 +35,6 @@ public class MemberService {
     }
     public Member getMemberByUserName() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        // Authentication 객체에서 사용자 이름(username) 추출
 
         Member findMember = memberRepository.findByUsername(username)
                 .orElseThrow(MemberNotFoundException::new);
