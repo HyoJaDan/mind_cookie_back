@@ -67,4 +67,18 @@ public class HobbitController {
 
         return new BaseResponse<>(isDone, BaseResponseCode.SUCCESS);
     }
+
+    /**
+     * hobbit 삭제 api
+     * @param primaryHobbitId
+     * @param hobbitId
+     * @return
+     */
+    @ResponseBody
+    @DeleteMapping("/api/delete-hobbit/{primaryHobbitId}/{hobbitId}")
+    public BaseResponse<Boolean> deleteHobbit(@PathVariable Long primaryHobbitId, @PathVariable Long hobbitId) {
+        boolean isDeleted = hobbitService.deleteHobbit(primaryHobbitId, hobbitId);
+
+        return new BaseResponse<>(isDeleted, BaseResponseCode.SUCCESS);
+    }
 }
