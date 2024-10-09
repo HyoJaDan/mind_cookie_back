@@ -20,7 +20,9 @@ public class PrimaryHobbitRepository {
         em.persist(primaryHobbit);
         return primaryHobbit;
     }
-
+    public void delete(PrimaryHobbit primaryHobbit) {
+        em.remove(primaryHobbit);
+    }
     public Optional<PrimaryHobbit> findByNameAndMemberId(String primaryHobbitName, Long memberId) {
         TypedQuery<PrimaryHobbit> query = em.createQuery(
                 "SELECT ph FROM PrimaryHobbit ph"+

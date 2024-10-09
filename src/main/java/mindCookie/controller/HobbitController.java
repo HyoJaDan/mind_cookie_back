@@ -75,10 +75,10 @@ public class HobbitController {
      * @return
      */
     @ResponseBody
-    @DeleteMapping("/api/delete-hobbit/{primaryHobbitId}/{hobbitId}")
-    public BaseResponse<Boolean> deleteHobbit(@PathVariable Long primaryHobbitId, @PathVariable Long hobbitId) {
-        boolean isDeleted = hobbitService.deleteHobbit(primaryHobbitId, hobbitId);
+    @DeleteMapping("/api/delete-hobbit/{hobbitId}")
+    public BaseResponse<HobbitCombinedDTO> deleteHobbit(@PathVariable Long hobbitId) {
+        hobbitService.deleteHobbit2(hobbitId);
 
-        return new BaseResponse<>(isDeleted, BaseResponseCode.SUCCESS);
+        return getHobbitStatus();
     }
 }

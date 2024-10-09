@@ -8,8 +8,11 @@ import mindCookie.dto.Hobbit.HobbitStatusDTO;
 import mindCookie.dto.Hobbit.PrimaryHobbitStatusDTO;
 import mindCookie.dto.Hobbit.ToDoDTO;
 import mindCookie.repository.*;
+import org.hibernate.Hibernate;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import javax.swing.*;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -209,5 +212,21 @@ public class HobbitService {
             primaryHobbit.plusSucceed();
             return true;
         }
+    }
+
+    // 연관관계를 끊어야됨. hobbit -> primaryHobbit을 끊어야됨.
+    @Transactional
+    public boolean deleteHobbit2(Long hobbitId) {
+        Hobbit hobbit = hobbitListRepository.findByPrimaryHobbitIdAndHobbitId(hobbitId);
+        PrimaryHobbit primaryHobbit = hobbit.getPrimaryHobbit();
+        primaryHobbit.getHobbitList().remove(hobbit);
+        hobbit.removePrimaryHobbit();
+        if(primaryHobbit.getHobbitList().isEmpty()){
+            primaryHobbitRepository.delete(primaryHobbit);
+        } else {
+            hobbitListRepository.delete(hobbit);
+        }
+
+        return true;
     }
 }

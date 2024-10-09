@@ -13,7 +13,7 @@ import java.util.List;
 public class Hobbit {
     @Id
     @Column(name = "HOBBIT_ID")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String goalName;
 
@@ -22,7 +22,7 @@ public class Hobbit {
     @JsonIgnore
     private PrimaryHobbit primaryHobbit;
 
-    @OneToMany(mappedBy = "hobbit", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "hobbit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DailyHobbitStatus> dailyHobbitStatus = new ArrayList<>();
 
     public Hobbit(String goalName, PrimaryHobbit primaryHobbit) {
@@ -35,7 +35,9 @@ public class Hobbit {
         if(primaryHobbit != null)
             primaryHobbit.addHobbitList(this);
     }
-
+    public void removePrimaryHobbit(){
+        this.primaryHobbit=null;
+    }
     public void addDailyHobbitStatus(DailyHobbitStatus dailyHobbitStatus){
         this.dailyHobbitStatus.add(dailyHobbitStatus);
     }

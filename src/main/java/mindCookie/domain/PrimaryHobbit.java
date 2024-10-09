@@ -24,7 +24,7 @@ public class PrimaryHobbit {
     @JsonIgnore
     private Member member;
 
-    @OneToMany(mappedBy = "primaryHobbit", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "primaryHobbit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Hobbit> hobbitList = new ArrayList<>();
 
     public PrimaryHobbit(String primaryGoal, String color, Member member) {

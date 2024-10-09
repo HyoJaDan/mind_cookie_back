@@ -67,7 +67,13 @@ public class DailyHobbitStatusRepository {
 
         return statusMap;
     }
-
+    // 특정 hobbit과 관련된 모든 dailyHobbitStatus 삭제
+    public void deleteByHobbit(Hobbit hobbit) {
+        em.createQuery(
+                        "DELETE FROM DailyHobbitStatus d WHERE d.hobbit = :hobbit")
+                .setParameter("hobbit", hobbit)
+                .executeUpdate();
+    }
     public void delete(DailyHobbitStatus dailyHobbitStatus) {
         em.remove(dailyHobbitStatus);
     }
@@ -75,5 +81,5 @@ public class DailyHobbitStatusRepository {
     public void save(DailyHobbitStatus dailyHobbitStatus) {
         em.persist(dailyHobbitStatus);
     }
-
+    // 특정 hobbit과 관련된 모든 dailyHobbitStatus 삭제
 }
