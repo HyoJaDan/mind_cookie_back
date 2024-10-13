@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,5 +42,9 @@ public class SignUpService {
         memberRepository.save(member);
         return true;
     }
-
+    @Transactional
+    public boolean deleteMember(Member member) {
+        memberRepository.delete(member);
+        return true;
+    }
 }

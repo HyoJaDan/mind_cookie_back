@@ -48,4 +48,8 @@ public class MemberRepository {
             em.merge(member);   // 기존 엔티티 업데이트
         }
     }
+    // 회원 삭제 메서드
+    public void delete(Member member) {
+        em.remove(member); // 회원 삭제
+    }
 }
