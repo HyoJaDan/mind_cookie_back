@@ -28,5 +28,10 @@ public class EventRepository {
 
         return result.isEmpty() ? Optional.empty() : Optional.of(result);
     }
-
+    public List<Event> findEventsByMember(Long memberId) {
+        return em.createQuery(
+                        "select e from Event e where e.member.id = :memberId", Event.class)
+                .setParameter("memberId", memberId)
+                .getResultList();
+    }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +35,21 @@ public class EventController {
     public BaseResponse<EventInfoDTO> getEventInfo(Authentication authentication){
         return new BaseResponse<>(memberService.getMemberEventInfo(authentication), BaseResponseCode.SUCCESS);
     }
-
+    /**
+     * - `GET` : 모든 날짜의 이벤트 리스트를 가져오는 API : `/api/all-event-list`
+     *         - date : LocalDate
+     *         - participants : List<String>
+     *         - which_activity : String
+     *         - emotion : String
+     *         - emotion_rate : byte
+     */
+    @ResponseBody
+    @GetMapping("/api/all-event-list")
+    public BaseResponse<Map<LocalDate, List<EventDTO>>> getAllEventList() {
+        Member findMember = memberService.getMemberByUserName();
+        Map<LocalDate, List<EventDTO>> eventMap = eventService.getAllEventList(findMember.getId());
+        return new BaseResponse<>(eventMap, BaseResponseCode.SUCCESS);
+    }
     /**
      * - `GET` : 금일 event List 가져오는 API : `member/{id}/eventList`
      *         - date : LocalDateTime

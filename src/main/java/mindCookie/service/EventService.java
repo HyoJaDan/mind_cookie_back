@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,21 @@ public class EventService {
                 )
                 .orElseGet(List::of);
     }
+    public Map<LocalDate, List<EventDTO>> getAllEventList(Long memberId) {
+        List<Event> events = eventRepository.findEventsByMember(memberId);
 
+        return events.stream()
+                .collect(Collectors.groupingBy(
+                        Event::getDate,
+                        Collectors.mapping(event -> new EventDTO(
+                                event.getDate(),
+                                event.getParticipants(),
+                                event.getWhich_activity(),
+                                event.getEmotion(),
+                                event.getEmotionRate()
+                        ), Collectors.toList())
+                ));
+    }
     @Transactional
     public void addEvent(Member findMember, EventDTO eventDTO) {
         addIfAbsent(findMember.getEvent_participants(),eventDTO.getParticipants());

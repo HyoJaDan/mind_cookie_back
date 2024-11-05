@@ -23,7 +23,8 @@ class SignUpController {
             return false;
         }
     }
-    @DeleteMapping("/member/delete")
+    @ResponseBody
+    @DeleteMapping("/api/member/delete")
     public boolean deleteMember() {
         Member findMember = memberService.getMemberByUserName();
         boolean isDeleted = signUpService.deleteMember(findMember);

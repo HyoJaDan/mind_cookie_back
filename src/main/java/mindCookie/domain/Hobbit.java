@@ -13,7 +13,7 @@ import java.util.List;
 public class Hobbit {
     @Id
     @Column(name = "HOBBIT_ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
     private String goalName;
 
